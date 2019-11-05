@@ -4,35 +4,29 @@ using SharedShopping.Data.Services;
 
 namespace SharedShopping.Tests
 {
-    internal class FakeRepository : IRepository
+    public class FakeRepository : IRepository
     {
-        private readonly IList<string> tags;
-        private int tagsNextId;
-
         public FakeRepository()
         {
-            this.tags = new List<string>();
-            this.tagsNextId = 1;
+            this.Expenses = new List<ExpenseData>();
+            this.Users = new List<UserData>();
+            this.Contributions = new List<ContributionData>();
+            this.Tags = new List<TagData>();
         }
 
-        public void create(TagData tagData)
-        {
-            throw new System.NotImplementedException();
-        }
+        public IList<ExpenseData> Expenses { get; }
+        public IList<UserData> Users { get; }
+        public IList<ContributionData> Contributions { get; }
+        public IList<TagData> Tags { get; }
 
         public void create(ExpenseData itemData)
         {
-            throw new System.NotImplementedException();
+            this.Expenses.Add(itemData);
         }
 
         public void create(UserData dataItem)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void create(ContributionData dataItem)
-        {
-            throw new System.NotImplementedException();
+            this.Users.Add(dataItem);
         }
 
         public IEnumerable<ContributionData> getContributionsByExpense(int expenseId)
@@ -62,12 +56,7 @@ namespace SharedShopping.Tests
 
         public TagData getOrCreateTag(string name)
         {
-            this.tags.Add(name);
-            return new TagData
-            {
-                Name = name,
-                Id = this.tagsNextId++,
-            };
+            throw new System.NotImplementedException();
         }
 
         public UserData getSingleUser(string userName)
@@ -90,11 +79,6 @@ namespace SharedShopping.Tests
             throw new System.NotImplementedException();
         }
 
-        public void saveOrCreate(TagData dataItem)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void save(ExpenseData dataItem)
         {
             throw new System.NotImplementedException();
@@ -105,7 +89,7 @@ namespace SharedShopping.Tests
             throw new System.NotImplementedException();
         }
 
-        public void save(ContributionData dataItem)
+        public void saveOrCreate(TagData tag)
         {
             throw new System.NotImplementedException();
         }
