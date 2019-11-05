@@ -1,8 +1,10 @@
-﻿using Blacksmith.Validations;
+﻿using Blacksmith.Automap.Extensions;
+using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
+using SharedShopping.Domain.Models;
 
-namespace SharedShopping.Domain.Models.Internals
+namespace SharedShopping.Domain.Internals
 {
     internal class Contribution : AbstractDomainModel<ContributionData>, IContribution
     {
@@ -15,19 +17,9 @@ namespace SharedShopping.Domain.Models.Internals
             this.parentExpense = parentExpense;
         }
 
-        public IUser User
-        {
-            get
-            {
-                IUser user;
-                UserData userData;
-
-                userData = this.repository.getSingleUser(this.dataItem.UserId);
-                user = prv_createDomainInstance<UserData, User>(userData);
-
-                return user;
-            }
-        }
+        public IUser User => this.repository
+                    .getSingleUser(this.dataItem.UserId)
+                    .mapTo(prv_createDomainInstance<UserData, User>);
 
         public decimal Amount => this.dataItem.Amount;
         public IExpense Expense => this.parentExpense;

@@ -2,11 +2,11 @@
 using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
+using SharedShopping.Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace SharedShopping.Domain.Models.Internals
+namespace SharedShopping.Domain.Internals
 {
     internal class Expense : AbstractDomainModel<ExpenseData>, IExpense
     {

@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using Blacksmith.Validations;
 using Blacksmith.Automap.Extensions;
-using SharedShopping.Data;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
-using System.Linq;
-using SharedShopping.Domain.Models.Internals;
 
-namespace SharedShopping.Domain.Models.Internals
+namespace SharedShopping.Domain.Internals
 {
     internal class Tag : AbstractDomainModel<TagData>, ITag
     {
@@ -24,7 +21,7 @@ namespace SharedShopping.Domain.Models.Internals
                 Name = name,
             };
 
-            this.repository.create(this.dataItem);
+            this.repository.saveOrCreate(this.dataItem);
             prv_validate(tagData);
             this.dataItem = tagData;
         }
@@ -41,7 +38,7 @@ namespace SharedShopping.Domain.Models.Internals
             {
                 this.validate.stringIsNotEmpty(value);
                 this.dataItem.Name = value;
-                this.repository.save(this.dataItem);
+                this.repository.saveOrCreate(this.dataItem);
             }
         }
 

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Blacksmith.Automap.Extensions;
 using Blacksmith.Validations;
-using SharedShopping.Data;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
+using SharedShopping.Domain.Models;
 
-namespace SharedShopping.Domain.Models.Internals
+namespace SharedShopping.Domain.Internals
 {
     internal class User : AbstractDomainModel<UserData>, IUser
     {

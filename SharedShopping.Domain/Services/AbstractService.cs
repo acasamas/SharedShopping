@@ -1,21 +1,17 @@
-﻿using Blacksmith.Automap.Extensions;
-using Blacksmith.Validations;
-using SharedShopping.Data.Models;
+﻿using Blacksmith.Validations;
 using SharedShopping.Data.Services;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace SharedShopping.Domain.Models.Internals
+namespace SharedShopping.Domain.Services
 {
-    internal abstract class AbstractDomainModel<TData> where TData: class
+    public abstract class AbstractService
     {
         protected readonly Asserts assert;
-        protected TData dataItem;
         protected readonly IValidator validate;
         protected readonly IRepository repository;
 
-        public AbstractDomainModel(IValidator validate, IRepository repository)
+        public AbstractService(IValidator validate, IRepository repository)
         {
             this.assert = Asserts.Assert;
 
@@ -24,17 +20,7 @@ namespace SharedShopping.Domain.Models.Internals
 
             this.validate = validate;
             this.repository = repository;
-            this.dataItem = null;
         }
-
-        protected AbstractDomainModel(IValidator validate, IRepository repository, TData dataItem)
-            : this(validate, repository)
-        {
-            prv_validate(dataItem);
-            this.dataItem = dataItem;
-        }
-
-        protected abstract void prv_validate(TData data);
 
         protected TOut prv_createDomainInstance<TIn, TOut>(TIn source)
         {

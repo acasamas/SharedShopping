@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blacksmith.Automap" Version="2.1.5" />
+    <PackageReference Include="Blacksmith.Automap" Version="2.2.0" />
     <PackageReference Include="Blacksmith.Validations" Version="1.2.5" />
   </ItemGroup>
 
