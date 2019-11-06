@@ -16,16 +16,16 @@ namespace SharedShopping.Tests
         [Fact]
         public void can_create_tag_service()
         {
+            IDomainCore domainCore;
             ITagService tagService;
             IDomainStrings strings;
-            IValidator validator;
-            IRepository repository;
+            FakeRepository repository;
 
             repository = new FakeRepository();
             strings = new EsDomainStrings();
-            validator = new Validator<DomainException>(strings, message => new DomainException(message));
+            domainCore = new DomainCore(strings, repository);
 
-            tagService = new TagService(validator, repository);
+            tagService = new TagService(domainCore);
 
             Assert.NotNull(tagService);
         }

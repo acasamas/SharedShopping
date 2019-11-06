@@ -1,11 +1,10 @@
 ﻿using Blacksmith.Validations.Localizations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharedShopping.Domain.Localizations
 {
     public interface IDomainStrings : IValidatorStrings
     {
+        string Contribution_amount_is_positive { get; }
+        string Expense_concept_cannot_be_empty { get; }
     }
 }

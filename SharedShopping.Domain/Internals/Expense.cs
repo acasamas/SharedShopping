@@ -3,6 +3,7 @@ using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
+using SharedShopping.Domain.Services;
 using System;
 using System.Collections.Generic;
 
@@ -10,19 +11,23 @@ namespace SharedShopping.Domain.Internals
 {
     internal class Expense : AbstractDomainModel<ExpenseData>, IExpense
     {
-        public Expense(IValidator validate, IRepository repository, ExpenseData dataItem)
-            : base(validate, repository, dataItem) { }
+        public Expense(IDomainCore domainCore, ExpenseData dataItem)
+            : base(domainCore, dataItem) { }
 
-        public Expense(IValidator validate, IRepository repository
+        public Expense(IDomainCore domainCore
             , DateTime date, string concept, IEnumerable<NewContribution> contributions)
-            : base(validate, repository, prv_buildData(repository, date, concept))
+            : base(domainCore, prv_buildData(domainCore.Repository, date, concept))
         {
             foreach (NewContribution contribution in contributions)
             {
                 int userId;
                 ContributionData contributionData;
 
-                userId = this.repository.getSingleUser(contribution.UserName).Id.Value;
+                userId = this.domainCore
+                    .Repository
+                    .getSingleUser(contribution.UserName)
+                    .Id
+                    .Value;
 
                 contributionData = new ContributionData
                 {
@@ -31,15 +36,19 @@ namespace SharedShopping.Domain.Internals
                     ExpenseId = this.dataItem.Id.Value,
                 };
 
-                this.repository.setContribution(contributionData);
+                this.domainCore
+                    .Repository
+                    .setContribution(contributionData);
             }
         }
 
-        public IEnumerable<IContribution> Contributions => this.repository
+        public IEnumerable<IContribution> Contributions => this.domainCore
+            .Repository
             .getContributionsByExpense(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ContributionData, Contribution>);
 
-        public IEnumerable<IUser> Debtors => this.repository
+        public IEnumerable<IUser> Debtors => this.domainCore
+            .Repository
             .getDebtorsByExpense(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<UserData, User>);
 
@@ -48,15 +57,16 @@ namespace SharedShopping.Domain.Internals
             get => this.dataItem.Concept;
             set
             {
-                this.validate.stringIsNotEmpty(value);
+                this.domainCore.stringIsNotEmpty(value, this.domainCore.Strings.Expense_concept_cannot_be_empty);
                 this.dataItem.Concept = value;
-                this.repository.save(this.dataItem);
+                this.domainCore.Repository.save(this.dataItem);
             }
         }
 
         public DateTime Date => this.dataItem.Date;
 
-        public IEnumerable<ITag> Tags => this.repository
+        public IEnumerable<ITag> Tags => this.domainCore
+            .Repository
             .getTagsByExpense(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<TagData, Tag>);
 
@@ -66,13 +76,20 @@ namespace SharedShopping.Domain.Internals
         {
             UserData user;
 
-            user = this.repository.getSingleUser(userName);
-            this.repository.setDebtor(this.dataItem.Id.Value, user.Id.Value);
+            user = this.domainCore
+                .Repository
+                .getSingleUser(userName);
+
+            this.domainCore
+                .Repository
+                .setDebtor(this.dataItem.Id.Value, user.Id.Value);
         }
 
         public void setTag(string tagName)
         {
-            this.repository.setExpenseTag(this.dataItem.Id.Value, tagName);
+            this.domainCore
+                .Repository
+                .setExpenseTag(this.dataItem.Id.Value, tagName);
         }
 
         protected override void prv_validate(ExpenseData data)
