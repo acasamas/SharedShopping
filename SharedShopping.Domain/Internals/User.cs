@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Blacksmith.Automap.Extensions;
 using Blacksmith.Validations;
 using SharedShopping.Data.Models;
@@ -10,23 +11,10 @@ namespace SharedShopping.Domain.Internals
     internal class User : AbstractDomainModel<UserData>, IUser
     {
         public User(IValidator validate, IRepository repository, UserData userData)
-            :base (validate, repository, userData)
-        {
-        }
+            : base(validate, repository, userData) { }
 
-        public User(IValidator validate, IRepository repository, string name) : base(validate, repository)
-        {
-            UserData userData;
-
-            userData = new UserData
-            {
-                Name = name,
-            };
-
-            this.repository.create(userData);
-            prv_validate(userData);
-            this.dataItem = userData;
-        }
+        public User(IValidator validate, IRepository repository, string name)
+            : base(validate, repository, prv_buildData(repository, name)) { }
 
         public string Name
         {
@@ -46,12 +34,24 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IExpense> Expenses => this.repository
             .getExpensesByUser(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, Expense>);
-        
+
         protected override void prv_validate(UserData userData)
         {
-            this.assert.isNotNull(userData);
             this.assert.stringIsNotEmpty(userData.Name);
             this.assert.isTrue(userData.Id.HasValue, "User ID has no value.");
+        }
+
+        private static UserData prv_buildData(IRepository repository, string name)
+        {
+            UserData userData;
+
+            userData = new UserData
+            {
+                Name = name,
+            };
+
+            repository.create(userData);
+            return userData;
         }
     }
 }

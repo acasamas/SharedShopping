@@ -11,23 +11,12 @@ namespace SharedShopping.Domain.Internals
     internal class Expense : AbstractDomainModel<ExpenseData>, IExpense
     {
         public Expense(IValidator validate, IRepository repository, ExpenseData dataItem)
-            : base(validate, repository, dataItem)
-        {
-        }
+            : base(validate, repository, dataItem) { }
 
         public Expense(IValidator validate, IRepository repository
             , DateTime date, string concept, IEnumerable<NewContribution> contributions)
-            : base(validate, repository)
+            : base(validate, repository, prv_buildData(repository, date, concept))
         {
-            this.dataItem = new ExpenseData
-            {
-                Date = date,
-                Concept = concept,
-            };
-
-            this.repository.create(this.dataItem);
-            prv_validate(this.dataItem);
-
             foreach (NewContribution contribution in contributions)
             {
                 int userId;
@@ -88,10 +77,23 @@ namespace SharedShopping.Domain.Internals
 
         protected override void prv_validate(ExpenseData data)
         {
-            this.assert.isNotNull(data);
             this.validate.stringIsNotEmpty(data.Concept);
             this.validate.isTrue(data.Date > new DateTime(2000, 1, 1)
                 , "La fecha no puede ser inferior al año 2000.");
+        }
+
+        private static ExpenseData prv_buildData(IRepository repository, DateTime date, string concept)
+        {
+            ExpenseData expenseData;
+
+            expenseData = new ExpenseData
+            {
+                Date = date,
+                Concept = concept,
+            };
+
+            repository.create(expenseData);
+            return expenseData;
         }
     }
 }

@@ -26,7 +26,6 @@ namespace SharedShopping.Domain.Internals
 
         protected override void prv_validate(ContributionData data)
         {
-            this.assert.isNotNull(data);
             this.validate.isTrue(data.Amount > 0, "Amount must be positive");
         }
     }
