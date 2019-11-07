@@ -12,7 +12,7 @@ namespace SharedShopping.Data.Services
         void create(ExpenseData expense);
         void save(ExpenseData expense);
         void setDebtor(int expenseId, int userId);
-        void setExpenseTag(int expenseId, string tagName);
+        void setExpenseTag(int expenseId, int tagId);
         IEnumerable<UserData> getDebtorsByExpense(int expenseId);
         IEnumerable<ContributionData> getContributionsByExpense(int expenseId);
         void setContribution(ContributionData contribution);
@@ -20,7 +20,7 @@ namespace SharedShopping.Data.Services
         
         void create(UserData user);
         void save(UserData user);
-        IEnumerable<ExpenseData> getExpensesByUser(int userId);
+        IEnumerable<ExpenseData> getExpensesByDebtor(int userId);
         IEnumerable<ContributionData> getContributionsByUser(int userId);
         UserData getSingleUser(string userName);
         UserData getSingleUser(int userId);

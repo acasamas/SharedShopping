@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Blacksmith.Automap.Extensions;
-using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
@@ -33,10 +31,12 @@ namespace SharedShopping.Domain.Internals
             .getContributionsByUser(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ContributionData, Contribution>);
 
-        public IEnumerable<IExpense> Expenses => this.services
+        public IEnumerable<IExpense> ExpensesAsDebtor => this.services
             .Repository
-            .getExpensesByUser(this.dataItem.Id.Value)
+            .getExpensesByDebtor(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, Expense>);
+
+        public IEnumerable<Debt> Debts => throw new System.NotImplementedException();
 
         protected override void prv_validate(UserData userData)
         {

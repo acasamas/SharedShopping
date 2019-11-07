@@ -53,71 +53,115 @@ namespace SharedShopping.Tests.Fakes
                 .Join(this.Users, debtor => debtor.UserId, user => user.Id, (debtor, user) => user);
         }
 
+        public IEnumerable<ExpenseData> getExpensesByDebtor(int userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IEnumerable<ExpenseData> getExpensesByTag(int tagId)
         {
             return this.TaggedExpenses
-                .Where(te => te.TagId == tagId)
-                .Join(this.Expenses, te => te.ExpenseId, tag => tag.Id, (te, tag) => tag);
-        }
-
-        public IEnumerable<ExpenseData> getExpensesByUser(int id)
-        {
-            throw new System.NotImplementedException();
+                .Where(mm => mm.TagId == tagId)
+                .Join(this.Expenses, mm => mm.ExpenseId, expense => expense.Id, (mm, expense) => expense);
         }
 
         public TagData getOrCreateTag(string name)
         {
-            throw new System.NotImplementedException();
+            TagData tagData;
+
+            tagData = new TagData
+            {
+                Id = this.Tags.Count + 1,
+                Name = name,
+            };
+
+            this.Tags.Add(tagData);
+            return tagData;
         }
 
         public UserData getSingleUser(string userName)
         {
-            throw new System.NotImplementedException();
+            return this.Users.Single(u => u.Name == userName);
         }
 
         public UserData getSingleUser(int userId)
         {
-            throw new System.NotImplementedException();
+            return this.Users.Single(u => u.Id == userId);
         }
 
         public IEnumerable<TagData> getTags()
         {
-            throw new System.NotImplementedException();
+            return this.Tags;
         }
 
-        public IEnumerable<TagData> getTagsByExpense(int id)
+        public IEnumerable<TagData> getTagsByExpense(int expenseId)
         {
-            throw new System.NotImplementedException();
+            return this.TaggedExpenses
+                .Where(mm => mm.ExpenseId == expenseId)
+                .Join(this.Tags, mm => mm.TagId, tag => tag.Id, (mm, tag) => tag);
         }
 
-        public void save(ExpenseData dataItem)
+        public void save(ExpenseData expense)
         {
-            throw new System.NotImplementedException();
+            ExpenseData data;
+
+            data = this.Expenses.Single(e => e.Id == expense.Id);
+            data.Concept = expense.Concept;
+            data.Date = expense.Date;
         }
 
-        public void save(UserData dataItem)
+        public void save(UserData user)
         {
-            throw new System.NotImplementedException();
+            UserData data;
+
+            data = this.Users.Single(u => u.Id == user.Id);
+            data.Name = user.Name;
         }
 
         public void saveOrCreate(TagData tag)
         {
-            throw new System.NotImplementedException();
+            TagData data;
+
+            data = this.Tags.Single(t => t.Id == tag.Id);
+            data.Name = tag.Name;
         }
 
-        public void setContribution(ContributionData contributionData)
+        public void setContribution(ContributionData contribution)
         {
-            throw new System.NotImplementedException();
+            ContributionData data;
+
+            data = this.Contributions.Single(c => c.ExpenseId == contribution.ExpenseId && c.UserId == contribution.UserId);
+            data.Amount = contribution.Amount;
         }
 
         public void setDebtor(int expenseId, int userId)
         {
-            throw new System.NotImplementedException();
+            bool existsEntry;
+
+            existsEntry = this.Debtors.Any(mm => mm.ExpenseId == expenseId && mm.UserId == userId);
+
+            if (false == existsEntry)
+                this.Debtors.Add(new DebtorData
+                {
+                    UserId = userId,
+                    ExpenseId = expenseId,
+                    Id = this.Debtors.Count + 1,
+                });
         }
 
-        public void setExpenseTag(int expenseId, string tagName)
+        public void setExpenseTag(int expenseId, int tagId)
         {
-            throw new System.NotImplementedException();
+            bool existsEntry;
+
+            existsEntry = this.TaggedExpenses.Any(mm => mm.ExpenseId == expenseId && mm.TagId == tagId);
+
+            if (false == existsEntry)
+                this.TaggedExpenses.Add(new TaggedExpense
+                {
+                    ExpenseId = expenseId,
+                    TagId = tagId,
+                    Id = this.TaggedExpenses.Count + 1,
+                });
         }
     }
 }

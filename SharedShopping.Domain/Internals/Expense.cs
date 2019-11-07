@@ -1,11 +1,10 @@
-﻿using Blacksmith.Automap.Extensions;
-using Blacksmith.Validations;
+﻿using System;
+using System.Collections.Generic;
+using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
-using System;
-using System.Collections.Generic;
 
 namespace SharedShopping.Domain.Internals
 {
@@ -87,9 +86,15 @@ namespace SharedShopping.Domain.Internals
 
         public void setTag(string tagName)
         {
+            TagData tag;
+
+            tag = this.services
+                .Repository
+                .getOrCreateTag(tagName);
+
             this.services
                 .Repository
-                .setExpenseTag(this.dataItem.Id.Value, tagName);
+                .setExpenseTag(this.dataItem.Id.Value, tag.Id.Value);
         }
 
         protected override void prv_validate(ExpenseData data)

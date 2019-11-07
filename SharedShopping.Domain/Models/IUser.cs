@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace SharedShopping.Domain.Models
 {
@@ -7,6 +6,7 @@ namespace SharedShopping.Domain.Models
     {
         string Name { get; set; }
         IEnumerable<IContribution> Contributions { get; }
-        IEnumerable<IExpense> Expenses { get; }
+        IEnumerable<IExpense> ExpensesAsDebtor { get; }
+        IEnumerable<Debt> Debts { get; }
     }
 }
