@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using Blacksmith.Validations;
-using SharedShopping.Data.Services;
-using SharedShopping.Domain.Models;
+﻿using SharedShopping.Data.Models;
 using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal abstract class AbstractDomainService<TData> : AbstractService where TData: class
+    internal abstract class AbstractDomainService<TData> : AbstractService where TData : AbstractData
     {
-        protected TData dataItem;
+        protected readonly TData dataItem;
 
-         protected AbstractDomainService(IDomainServices services, TData dataItem)
-            : base(services)
+        protected AbstractDomainService(IDomainServices services, TData dataItem) : base(services)
         {
             this.services.Asserts.isNotNull(dataItem);
             prv_validate(dataItem);
             this.dataItem = dataItem;
         }
+
+        public int DataId => this.dataItem.Id.Value;
 
         protected abstract void prv_validate(TData data);
 
