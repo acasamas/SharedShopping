@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
@@ -7,7 +9,7 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class User : AbstractDomainModel<UserData>, IUser
+    internal class User : AbstractDomainService<UserData>, IUser
     {
         public User(IDomainServices services, UserData userData)
             : base(services, userData) { }

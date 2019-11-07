@@ -1,14 +1,17 @@
-﻿using Blacksmith.Validations;
+﻿using System;
+using System.Collections.Generic;
+using Blacksmith.Validations;
 using SharedShopping.Data.Services;
+using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal abstract class AbstractDomainModel<TData> : AbstractService where TData: class
+    internal abstract class AbstractDomainService<TData> : AbstractService where TData: class
     {
         protected TData dataItem;
 
-         protected AbstractDomainModel(IDomainServices services, TData dataItem)
+         protected AbstractDomainService(IDomainServices services, TData dataItem)
             : base(services)
         {
             this.services.Asserts.isNotNull(dataItem);
@@ -17,5 +20,6 @@ namespace SharedShopping.Domain.Internals
         }
 
         protected abstract void prv_validate(TData data);
+
     }
 }

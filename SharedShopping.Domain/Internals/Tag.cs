@@ -9,7 +9,7 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class Tag : AbstractDomainModel<TagData>, ITag
+    internal class Tag : AbstractDomainService<TagData>, ITag
     {
 
         public Tag(IDomainServices services, string name) 

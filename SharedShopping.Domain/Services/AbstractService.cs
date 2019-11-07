@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using SharedShopping.Domain.Models;
 
 namespace SharedShopping.Domain.Services
 {

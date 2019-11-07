@@ -8,7 +8,7 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class Expense : AbstractDomainModel<ExpenseData>, IExpense
+    internal class Expense : AbstractDomainService<ExpenseData>, IExpense
     {
         public Expense(IDomainServices services, ExpenseData dataItem)
             : base(services, dataItem) { }
