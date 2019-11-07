@@ -3,6 +3,7 @@ using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
+using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
@@ -10,23 +11,24 @@ namespace SharedShopping.Domain.Internals
     {
         private readonly Expense parentExpense;
 
-        public Contribution(IValidator validate, IRepository repository
+        public Contribution(IDomainServices services
             , ContributionData dataItem, Expense parentExpense)
-            : base(validate, repository, dataItem)
+            : base(services, dataItem)
         {
             this.parentExpense = parentExpense;
         }
 
-        public IUser User => this.repository
-                    .getSingleUser(this.dataItem.UserId)
-                    .mapTo(prv_createDomainInstance<UserData, User>);
+        public IUser User => this.services
+            .Repository
+            .getSingleUser(this.dataItem.UserId)
+            .mapTo(prv_createDomainInstance<UserData, User>);
 
         public decimal Amount => this.dataItem.Amount;
         public IExpense Expense => this.parentExpense;
 
         protected override void prv_validate(ContributionData data)
         {
-            this.validate.isTrue(data.Amount > 0, "Amount must be positive");
+            this.services.Validator.contribution_amount_is_positive(data.Amount);
         }
     }
 }

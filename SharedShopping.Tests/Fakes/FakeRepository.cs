@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 
-namespace SharedShopping.Tests
+namespace SharedShopping.Tests.Fakes
 {
     public class FakeRepository : IRepository
     {
@@ -12,12 +13,16 @@ namespace SharedShopping.Tests
             this.Users = new List<UserData>();
             this.Contributions = new List<ContributionData>();
             this.Tags = new List<TagData>();
+            this.Debtors = new List<DebtorData>();
+            this.TaggedExpenses = new List<TaggedExpense>();
         }
 
         public IList<ExpenseData> Expenses { get; }
         public IList<UserData> Users { get; }
         public IList<ContributionData> Contributions { get; }
         public IList<TagData> Tags { get; }
+        public IList<DebtorData> Debtors { get; }
+        public IList<TaggedExpense> TaggedExpenses { get; }
 
         public void create(ExpenseData itemData)
         {
@@ -31,22 +36,28 @@ namespace SharedShopping.Tests
 
         public IEnumerable<ContributionData> getContributionsByExpense(int expenseId)
         {
-            throw new System.NotImplementedException();
+            return this.Contributions
+                .Where(c => c.ExpenseId == expenseId);
         }
 
         public IEnumerable<ContributionData> getContributionsByUser(int id)
         {
-            throw new System.NotImplementedException();
+            return this.Contributions
+                .Where(c => c.UserId == id);
         }
 
         public IEnumerable<UserData> getDebtorsByExpense(int expenseId)
         {
-            throw new System.NotImplementedException();
+            return this.Debtors
+                .Where(e => e.ExpenseId == expenseId)
+                .Join(this.Users, debtor => debtor.UserId, user => user.Id, (debtor, user) => user);
         }
 
         public IEnumerable<ExpenseData> getExpensesByTag(int tagId)
         {
-            throw new System.NotImplementedException();
+            return this.TaggedExpenses
+                .Where(te => te.TagId == tagId)
+                .Join(this.Expenses, te => te.ExpenseId, tag => tag.Id, (te, tag) => tag);
         }
 
         public IEnumerable<ExpenseData> getExpensesByUser(int id)

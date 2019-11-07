@@ -10,20 +10,22 @@ namespace SharedShopping.Domain.Services
 {
     public class TagService : AbstractService, ITagService
     {
-        public TagService(IValidator validate, IRepository repository) : base(validate, repository)
+        public TagService(IDomainServices domainCore) : base(domainCore)
         {
         }
 
         public ITag getOrCreateTag(string name)
         {
-            return this.repository
+            return this.services
+                .Repository
                 .getOrCreateTag(name)
                 .mapTo(prv_createDomainInstance<TagData, Tag>);
         }
 
         public IEnumerable<ITag> getTags()
         {
-            return this.repository
+            return this.services
+                .Repository
                 .getTags()
                 .map(prv_createDomainInstance<TagData, Tag>);
         }

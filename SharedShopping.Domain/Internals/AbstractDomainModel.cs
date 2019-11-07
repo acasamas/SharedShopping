@@ -8,10 +8,10 @@ namespace SharedShopping.Domain.Internals
     {
         protected TData dataItem;
 
-         protected AbstractDomainModel(IValidator validate, IRepository repository, TData dataItem)
-            : base(validate, repository)
+         protected AbstractDomainModel(IDomainServices services, TData dataItem)
+            : base(services)
         {
-            this.validate.isNotNull(dataItem);
+            this.services.Asserts.isNotNull(dataItem);
             prv_validate(dataItem);
             this.dataItem = dataItem;
         }

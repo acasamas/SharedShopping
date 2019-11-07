@@ -1,25 +1,15 @@
-﻿using Blacksmith.Validations;
-using SharedShopping.Data.Services;
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace SharedShopping.Domain.Services
 {
     public abstract class AbstractService
     {
-        protected readonly Asserts assert;
-        protected readonly IValidator validate;
-        protected readonly IRepository repository;
+        protected readonly IDomainServices services;
 
-        public AbstractService(IValidator validate, IRepository repository)
+        public AbstractService(IDomainServices services)
         {
-            this.assert = Asserts.Assert;
-
-            this.assert.isNotNull(validate);
-            this.assert.isNotNull(repository);
-
-            this.validate = validate;
-            this.repository = repository;
+            this.services = services;
         }
 
         protected TOut prv_createDomainInstance<TIn, TOut>(TIn source)
@@ -28,10 +18,10 @@ namespace SharedShopping.Domain.Services
             ConstructorInfo constructor;
 
             outType = typeof(TOut);
-            constructor = outType.GetConstructor(new Type[] { typeof(IValidator), typeof(IRepository), typeof(TIn) });
-            this.assert.isNotNull(constructor);
+            constructor = outType.GetConstructor(new Type[] { typeof(IDomainServices), typeof(TIn) });
+            this.services.Asserts.isNotNull(constructor);
 
-            return (TOut)constructor.Invoke(new object[] { this.validate, this.repository, source });
+            return (TOut)constructor.Invoke(new object[] { this.services, source });
         }
     }
 }
