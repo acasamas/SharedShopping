@@ -1,31 +1,30 @@
 using Blacksmith.Validations;
 using Blacksmith.Validations.Exceptions;
 using SharedShopping.Data.Services;
-using SharedShopping.Domain;
 using SharedShopping.Domain.Localizations;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
-using System;
-using System.Collections.Generic;
+using SharedShopping.Domain.Validations;
+using SharedShopping.Tests.Fakes;
 using Xunit;
 
 namespace SharedShopping.Tests
 {
     public class UnitTest1
     {
+        private readonly FakeDomainServices services;
+
+        public UnitTest1()
+        {
+            this.services = new FakeDomainServices();
+        }
+
         [Fact]
         public void can_create_tag_service()
         {
-            IDomainCore domainCore;
             ITagService tagService;
-            IDomainStrings strings;
-            FakeRepository repository;
 
-            repository = new FakeRepository();
-            strings = new EsDomainStrings();
-            domainCore = new DomainCore(strings, repository);
-
-            tagService = new TagService(domainCore);
+            tagService = new TagService(this.services);
 
             Assert.NotNull(tagService);
         }
@@ -34,18 +33,17 @@ namespace SharedShopping.Tests
         public void can_create_tag()
         {
             ITagService tagService;
-            IDomainStrings strings;
-            IValidator validator;
-            IRepository repository;
             ITag tag;
 
-            repository = new FakeRepository();
-            strings = new EsDomainStrings();
-            validator = new Validator<DomainException>(strings, message => new DomainException(message));
-            tagService = new TagService(validator, repository);
+            tagService = new TagService(this.services);
+
+            this.services
+                .FakeRepository
+                .Tags
+                .Clear();
 
             tag = tagService.getOrCreateTag("Hostelería");
-
+            Assert.Equal(1, this.services.FakeRepository.Tags.Count);
             Assert.NotNull(tag);
             Assert.Equal("Hostelería", tag.Name);
         }
