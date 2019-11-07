@@ -25,5 +25,10 @@ namespace SharedShopping.Domain.Services
 
             return (TOut)constructor.Invoke(new object[] { this.services, source });
         }
+
+        protected IEnumerable<Debt> prv_computeDebtBalance()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

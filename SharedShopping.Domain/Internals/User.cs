@@ -38,7 +38,8 @@ namespace SharedShopping.Domain.Internals
             .getExpensesByDebtor(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, Expense>);
 
-        public IEnumerable<Debt> Debts => throw new System.NotImplementedException();
+        public IEnumerable<Debt> Debts => base.prv_computeDebtBalance()
+            .Where(debt => debt.Debtor.Name == this.dataItem.Name);
 
         protected override void prv_validate(UserData userData)
         {

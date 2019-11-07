@@ -8,5 +8,7 @@ namespace SharedShopping.Domain.Services
     {
         IExpense createExpense(DateTime date, string concept
             , IEnumerable<NewContribution> contributions);
+
+        IEnumerable<Debt> getCurrentDebtBalance();
     }
 }
