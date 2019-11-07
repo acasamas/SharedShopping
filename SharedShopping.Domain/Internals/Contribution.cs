@@ -11,14 +11,14 @@ namespace SharedShopping.Domain.Internals
     {
         private readonly Expense parentExpense;
 
-        public Contribution(IDomainCore domainCore
+        public Contribution(IDomainServices services
             , ContributionData dataItem, Expense parentExpense)
-            : base(domainCore, dataItem)
+            : base(services, dataItem)
         {
             this.parentExpense = parentExpense;
         }
 
-        public IUser User => this.domainCore
+        public IUser User => this.services
             .Repository
             .getSingleUser(this.dataItem.UserId)
             .mapTo(prv_createDomainInstance<UserData, User>);
@@ -28,7 +28,7 @@ namespace SharedShopping.Domain.Internals
 
         protected override void prv_validate(ContributionData data)
         {
-            this.domainCore.contribution_amount_is_positive(data.Amount);
+            this.services.Validator.contribution_amount_is_positive(data.Amount);
         }
     }
 }

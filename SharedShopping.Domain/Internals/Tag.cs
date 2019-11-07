@@ -5,38 +5,39 @@ using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
 using System;
+using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
     internal class Tag : AbstractDomainModel<TagData>, ITag
     {
 
-        public Tag(IValidator validate
-            , IRepository repository
-            , string name) : base(validate, repository, prv_buildData(repository, name)) { }
+        public Tag(IDomainServices services, string name) 
+            : base(services, prv_buildData(services.Repository, name)) { }
 
-        public Tag(IValidator validate, IRepository repository, TagData dataItem) 
-            : base(validate, repository, dataItem) { }
+        public Tag(IDomainServices services, TagData dataItem) 
+            : base(services, dataItem) { }
 
         public string Name
         {
             get => this.dataItem.Name;
             set
             {
-                this.validate.stringIsNotEmpty(value);
+                this.services.Validator.stringIsNotEmpty(value, this.services.Strings.Tag_name_cannot_be_empty);
                 this.dataItem.Name = value;
-                this.repository.saveOrCreate(this.dataItem);
+                this.services.Repository.saveOrCreate(this.dataItem);
             }
         }
 
-        public IEnumerable<IExpense> Expenses => this.repository
+        public IEnumerable<IExpense> Expenses => this.services
+            .Repository
             .getExpensesByTag(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, Expense>);
 
         protected override void prv_validate(TagData data)
         {
-            this.assert.stringIsNotEmpty(data.Name);
-            this.assert.isTrue(data.Id.HasValue, "TagData has no Id.");
+            this.services.Asserts.stringIsNotEmpty(data.Name, this.services.Strings.Tag_name_cannot_be_empty);
+            this.services.Asserts.isTrue(data.Id.HasValue, this.services.Strings.Data_object_has_no_id);
         }
 
         private static TagData prv_buildData(IRepository repository, string name)

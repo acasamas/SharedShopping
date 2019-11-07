@@ -8,10 +8,10 @@ namespace SharedShopping.Domain.Internals
     {
         protected TData dataItem;
 
-         protected AbstractDomainModel(IDomainCore domainCore, TData dataItem)
-            : base(domainCore)
+         protected AbstractDomainModel(IDomainServices services, TData dataItem)
+            : base(services)
         {
-            this.domainCore.Assert.isNotNull(dataItem);
+            this.services.Asserts.isNotNull(dataItem);
             prv_validate(dataItem);
             this.dataItem = dataItem;
         }
