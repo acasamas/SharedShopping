@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
 
@@ -27,11 +28,13 @@ namespace SharedShopping.Tests.Fakes
         public void create(ExpenseData itemData)
         {
             this.Expenses.Add(itemData);
+            itemData.Id = this.Expenses.Count;
         }
 
         public void create(UserData dataItem)
         {
             this.Users.Add(dataItem);
+            dataItem.Id = this.Users.Count;
         }
 
         public IEnumerable<ContributionData> getContributionsByExpense(int expenseId)
@@ -111,8 +114,7 @@ namespace SharedShopping.Tests.Fakes
             ExpenseData data;
 
             data = this.Expenses.Single(e => e.Id == expense.Id);
-            data.Concept = expense.Concept;
-            data.Date = expense.Date;
+            expense.mapTo(data);
         }
 
         public void save(UserData user)
@@ -120,23 +122,40 @@ namespace SharedShopping.Tests.Fakes
             UserData data;
 
             data = this.Users.Single(u => u.Id == user.Id);
-            data.Name = user.Name;
+            user.mapTo(data);
         }
 
         public void saveOrCreate(TagData tag)
         {
             TagData data;
 
-            data = this.Tags.Single(t => t.Id == tag.Id);
-            data.Name = tag.Name;
+            if(tag.Id.HasValue)
+            {
+                data = this.Tags.Single(t => t.Id == tag.Id);
+                data.Name = tag.Name;
+            }
+            else
+            {
+                tag.Id = this.Tags.Count;
+                data = tag.mapTo<TagData>();
+                this.Tags.Add(data);
+            }
         }
 
         public void setContribution(ContributionData contribution)
         {
             ContributionData data;
 
-            data = this.Contributions.Single(c => c.ExpenseId == contribution.ExpenseId && c.UserId == contribution.UserId);
-            data.Amount = contribution.Amount;
+            data = this.Contributions.SingleOrDefault(c => c.ExpenseId == contribution.ExpenseId && c.UserId == contribution.UserId);
+
+            if(data != null)
+                contribution.mapTo(data);
+            else
+            {
+                contribution.Id = this.Contributions.Count;
+                data = contribution.mapTo<ContributionData>();
+                this.Contributions.Add(data);
+            }
         }
 
         public void setDebtor(int expenseId, int userId)
