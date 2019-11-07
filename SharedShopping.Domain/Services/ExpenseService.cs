@@ -11,7 +11,7 @@ namespace SharedShopping.Domain.Services
 
         }
 
-        public IExpense createExpense(DateTime date, string concept, IEnumerable<NewContribution> contributions)
+        public IExpense createExpense(DateTime date, string concept, IEnumerable<UserContribution> contributions)
         {
             throw new NotImplementedException();
         }

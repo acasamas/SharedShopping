@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
@@ -14,23 +15,18 @@ namespace SharedShopping.Domain.Internals
             : base(services, dataItem) { }
 
         public Expense(IDomainServices services
-            , DateTime date, string concept, IEnumerable<NewContribution> contributions)
+            , DateTime date, string concept, IEnumerable<UserContribution> contributions)
             : base(services, prv_buildData(services.Repository, date, concept))
         {
-            foreach (NewContribution contribution in contributions)
+            foreach (UserContribution contribution in contributions)
             {
-                int userId;
                 ContributionData contributionData;
 
-                userId = this.services
-                    .Repository
-                    .getSingleUser(contribution.UserName)
-                    .Id
-                    .Value;
+                this.services.Asserts.isInstanceOf<User>(contribution.User);
 
                 contributionData = new ContributionData
                 {
-                    UserId = userId,
+                    UserId = ((User)contribution.User).DataId,
                     Amount = contribution.Amount,
                     ExpenseId = this.dataItem.Id.Value,
                 };
@@ -44,7 +40,7 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IContribution> Contributions => this.services
             .Repository
             .getContributionsByExpense(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ContributionData, Contribution>);
+            .map(prv_createDomainInstance<ContributionData, DomainContribution>);
 
         public IEnumerable<IUser> Debtors => this.services
             .Repository
@@ -71,30 +67,35 @@ namespace SharedShopping.Domain.Internals
 
         public int Id => this.dataItem.Id.Value;
 
-        public void setDebtor(string userName)
+        public void setDebtor(IUser user)
         {
-            UserData user;
+            bool userIsAlreadyDebtor;
+            int userId;
 
-            user = this.services
+            this.services.Asserts.isInstanceOf<User>(user);
+
+            userId = (user as User).DataId;
+
+            userIsAlreadyDebtor = this.services
                 .Repository
-                .getSingleUser(userName);
+                .getDebtorsByExpense(this.DataId)
+                .Any(u => u.Id == userId);
+
+            this.services.Validator.isFalse(userIsAlreadyDebtor
+                , this.services.Strings.User_is_already_a_debtor_of_expense(user.Name, this.DataId));
 
             this.services
                 .Repository
-                .setDebtor(this.dataItem.Id.Value, user.Id.Value);
+                .setDebtor(this.dataItem.Id.Value, userId);
         }
 
-        public void setTag(string tagName)
+        public void setTag(ITag tag)
         {
-            TagData tag;
-
-            tag = this.services
-                .Repository
-                .getOrCreateTag(tagName);
+            this.services.Asserts.isInstanceOf<Tag>(tag);
 
             this.services
                 .Repository
-                .setExpenseTag(this.dataItem.Id.Value, tag.Id.Value);
+                .setExpenseTag(this.dataItem.Id.Value, (tag as Tag).DataId);
         }
 
         protected override void prv_validate(ExpenseData data)

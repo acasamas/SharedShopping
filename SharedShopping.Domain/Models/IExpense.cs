@@ -12,7 +12,7 @@ namespace SharedShopping.Domain.Models
         DateTime Date { get; }
         IEnumerable<ITag> Tags { get; }
 
-        void setDebtor(string userName);
-        void setTag(string tagName);
+        void setDebtor(IUser user);
+        void setTag(ITag tag);
     }
 }

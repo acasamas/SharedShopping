@@ -1,11 +1,7 @@
 using System;
-using Blacksmith.Validations;
 using Blacksmith.Validations.Exceptions;
-using SharedShopping.Data.Services;
-using SharedShopping.Domain.Localizations;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
-using SharedShopping.Domain.Validations;
 using SharedShopping.Tests.Fakes;
 using Xunit;
 
@@ -54,18 +50,39 @@ namespace SharedShopping.Tests
         {
             IExpenseService expenseService;
             IExpense expense;
+            IUser georgeUser, martiUser;
+            IUserService userService;
 
+            this.services.FakeRepository.Users.Clear();
+            this.services.FakeRepository.Debtors.Clear();
+            this.services.FakeRepository.Expenses.Clear();
+
+            userService = new UserService(this.services);
             expenseService = new ExpenseService(this.services);
 
-            expense = expenseService.createExpense(DateTime.Now, "Domino's Pizza", new NewContribution[]
-            {
-                new NewContribution
-                {
-                     Amount = 19.95m,
+            georgeUser = userService.createUser("George Mcfly");
+            Assert.Equal(1, this.services.FakeRepository.Users.Count);
+            martiUser = userService.createUser("Marti Mcfly");
+            Assert.Equal(2, this.services.FakeRepository.Users.Count);
 
+            expense = expenseService.createExpense(DateTime.Now, "Domino's Pizza", new UserContribution[]
+            {
+                new UserContribution
+                {
+                    Amount = 19.95m,
+                    User = georgeUser,
                 }
             });
-            throw new NotImplementedException();
+            Assert.Equal(1, this.services.FakeRepository.Expenses.Count);
+            Assert.Equal(1, this.services.FakeRepository.Contributions.Count);
+            Assert.Equal(0, this.services.FakeRepository.Debtors.Count);
+
+            expense.setDebtor(georgeUser);
+            Assert.Equal(1, this.services.FakeRepository.Debtors.Count);
+            Assert.Throws<DomainException>(() => expense.setDebtor(georgeUser));
+
+            expense.setDebtor(martiUser);
+            Assert.Equal(2, this.services.FakeRepository.Debtors.Count);
         }
     }
 }

@@ -10,5 +10,7 @@ namespace SharedShopping.Domain.Localizations
         string Data_object_has_no_id { get; }
         string User_name_cannot_be_empty { get; }
         string Expense_date_must_be_after_year_1900 { get; }
+
+        string User_is_already_a_debtor_of_expense(string name, int expenseId);
     }
 }

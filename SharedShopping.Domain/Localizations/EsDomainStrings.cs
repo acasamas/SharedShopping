@@ -13,5 +13,7 @@ namespace SharedShopping.Domain.Localizations
         public string Data_object_has_no_id => "Falta el identificador en el objeto de datos.";
         public string User_name_cannot_be_empty => "El usuario requiere de un nombre.";
         public string Expense_date_must_be_after_year_1900 => "La fecha del gasto debe ser posterior al 1900 d.c.";
+
+        public string User_is_already_a_debtor_of_expense(string name, int expenseId) => $"User '{name}' is already a debtor of expense {expenseId}";
     }
 }

@@ -31,7 +31,7 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IContribution> Contributions => this.services
             .Repository
             .getContributionsByUser(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ContributionData, Contribution>);
+            .map(prv_createDomainInstance<ContributionData, DomainContribution>);
 
         public IEnumerable<IExpense> ExpensesAsDebtor => this.services
             .Repository
