@@ -101,6 +101,11 @@ namespace SharedShopping.Tests.Fakes
                 .Join(this.Tags, mm => mm.TagId, tag => tag.Id, (mm, tag) => tag);
         }
 
+        public IEnumerable<UserData> getUsers()
+        {
+            return this.Users;
+        }
+
         public void save(ExpenseData expense)
         {
             ExpenseData data;

@@ -23,6 +23,7 @@ namespace SharedShopping.Data.Services
         IEnumerable<ExpenseData> getExpensesByDebtor(int userId);
         IEnumerable<ContributionData> getContributionsByUser(int userId);
         UserData getSingleUser(string userName);
+        IEnumerable<UserData> getUsers();
         UserData getSingleUser(int userId);
         
         void saveOrCreate(TagData tag);
