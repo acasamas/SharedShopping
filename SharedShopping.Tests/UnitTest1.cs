@@ -1,3 +1,4 @@
+using System;
 using Blacksmith.Validations;
 using Blacksmith.Validations.Exceptions;
 using SharedShopping.Data.Services;
@@ -46,6 +47,25 @@ namespace SharedShopping.Tests
             Assert.Equal(1, this.services.FakeRepository.Tags.Count);
             Assert.NotNull(tag);
             Assert.Equal("Hostelería", tag.Name);
+        }
+
+        [Fact]
+        public void can_create_expense()
+        {
+            IExpenseService expenseService;
+            IExpense expense;
+
+            expenseService = new ExpenseService(this.services);
+
+            expense = expenseService.createExpense(DateTime.Now, "Domino's Pizza", new NewContribution[]
+            {
+                new NewContribution
+                {
+                     Amount = 19.95m,
+
+                }
+            });
+            throw new NotImplementedException();
         }
     }
 }
