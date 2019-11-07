@@ -19,7 +19,7 @@ namespace SharedShopping.Domain.Services
             return this.services
                 .Repository
                 .getOrCreateTag(name)
-                .mapTo(prv_createDomainInstance<TagData, Tag>);
+                .mapTo(prv_createDomainInstance<TagData, PrvTag>);
         }
 
         public IEnumerable<ITag> getTags()
@@ -27,7 +27,7 @@ namespace SharedShopping.Domain.Services
             return this.services
                 .Repository
                 .getTags()
-                .map(prv_createDomainInstance<TagData, Tag>);
+                .map(prv_createDomainInstance<TagData, PrvTag>);
         }
     }
 }

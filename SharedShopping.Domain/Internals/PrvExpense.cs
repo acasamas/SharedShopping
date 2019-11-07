@@ -9,12 +9,12 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class Expense : AbstractDomainService<ExpenseData>, IExpense
+    internal class PrvExpense : PrvAbstractDomainService<ExpenseData>, IExpense
     {
-        public Expense(IDomainServices services, ExpenseData dataItem)
+        public PrvExpense(IDomainServices services, ExpenseData dataItem)
             : base(services, dataItem) { }
 
-        public Expense(IDomainServices services
+        public PrvExpense(IDomainServices services
             , DateTime date, string concept, IEnumerable<UserContribution> contributions)
             : base(services, prv_buildData(services.Repository, date, concept))
         {
@@ -22,11 +22,11 @@ namespace SharedShopping.Domain.Internals
             {
                 ContributionData contributionData;
 
-                this.services.Asserts.isInstanceOf<User>(contribution.User);
+                this.services.Asserts.isInstanceOf<PrvUser>(contribution.User);
 
                 contributionData = new ContributionData
                 {
-                    UserId = ((User)contribution.User).DataId,
+                    UserId = ((PrvUser)contribution.User).DataId,
                     Amount = contribution.Amount,
                     ExpenseId = this.dataItem.Id.Value,
                 };
@@ -40,12 +40,12 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IContribution> Contributions => this.services
             .Repository
             .getContributionsByExpense(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ContributionData, DomainContribution>);
+            .map(prv_createDomainInstance<ContributionData, PrvContribution>);
 
         public IEnumerable<IUser> Debtors => this.services
             .Repository
             .getDebtorsByExpense(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<UserData, User>);
+            .map(prv_createDomainInstance<UserData, PrvUser>);
 
         public string Concept
         {
@@ -63,7 +63,7 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<ITag> Tags => this.services
             .Repository
             .getTagsByExpense(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<TagData, Tag>);
+            .map(prv_createDomainInstance<TagData, PrvTag>);
 
         public int Id => this.dataItem.Id.Value;
 
@@ -72,9 +72,9 @@ namespace SharedShopping.Domain.Internals
             bool userIsAlreadyDebtor;
             int userId;
 
-            this.services.Asserts.isInstanceOf<User>(user);
+            this.services.Asserts.isInstanceOf<PrvUser>(user);
 
-            userId = (user as User).DataId;
+            userId = (user as PrvUser).DataId;
 
             userIsAlreadyDebtor = this.services
                 .Repository
@@ -91,11 +91,11 @@ namespace SharedShopping.Domain.Internals
 
         public void setTag(ITag tag)
         {
-            this.services.Asserts.isInstanceOf<Tag>(tag);
+            this.services.Asserts.isInstanceOf<PrvTag>(tag);
 
             this.services
                 .Repository
-                .setExpenseTag(this.dataItem.Id.Value, (tag as Tag).DataId);
+                .setExpenseTag(this.dataItem.Id.Value, (tag as PrvTag).DataId);
         }
 
         protected override void prv_validate(ExpenseData data)

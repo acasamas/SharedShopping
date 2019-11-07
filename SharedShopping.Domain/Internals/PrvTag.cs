@@ -9,13 +9,13 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class Tag : AbstractDomainService<TagData>, ITag
+    internal class PrvTag : PrvAbstractDomainService<TagData>, ITag
     {
 
-        public Tag(IDomainServices services, string name) 
+        public PrvTag(IDomainServices services, string name) 
             : base(services, prv_buildData(services.Repository, name)) { }
 
-        public Tag(IDomainServices services, TagData dataItem) 
+        public PrvTag(IDomainServices services, TagData dataItem) 
             : base(services, dataItem) { }
 
         public string Name
@@ -32,7 +32,7 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IExpense> Expenses => this.services
             .Repository
             .getExpensesByTag(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ExpenseData, Expense>);
+            .map(prv_createDomainInstance<ExpenseData, PrvExpense>);
 
         protected override void prv_validate(TagData data)
         {

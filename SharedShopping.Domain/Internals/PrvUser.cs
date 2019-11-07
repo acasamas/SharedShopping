@@ -9,12 +9,12 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class User : AbstractDomainService<UserData>, IUser
+    internal class PrvUser : PrvAbstractDomainService<UserData>, IUser
     {
-        public User(IDomainServices services, UserData userData)
+        public PrvUser(IDomainServices services, UserData userData)
             : base(services, userData) { }
 
-        public User(IDomainServices services, string name)
+        public PrvUser(IDomainServices services, string name)
             : base(services, prv_buildData(services.Repository, name)) { }
 
         public string Name
@@ -31,12 +31,12 @@ namespace SharedShopping.Domain.Internals
         public IEnumerable<IContribution> Contributions => this.services
             .Repository
             .getContributionsByUser(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ContributionData, DomainContribution>);
+            .map(prv_createDomainInstance<ContributionData, PrvContribution>);
 
         public IEnumerable<IExpense> ExpensesAsDebtor => this.services
             .Repository
             .getExpensesByDebtor(this.dataItem.Id.Value)
-            .map(prv_createDomainInstance<ExpenseData, Expense>);
+            .map(prv_createDomainInstance<ExpenseData, PrvExpense>);
 
         public IEnumerable<Debt> Debts => base.prv_computeDebtBalance()
             .Where(debt => debt.Debtor.Name == this.dataItem.Name);

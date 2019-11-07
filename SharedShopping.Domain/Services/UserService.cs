@@ -24,7 +24,7 @@ namespace SharedShopping.Domain.Services
             };
 
             this.services.Repository.create(userData);
-            return userData.mapTo(prv_createDomainInstance<UserData, User>);
+            return userData.mapTo(prv_createDomainInstance<UserData, PrvUser>);
         }
 
         public IEnumerable<IUser> getUsers()
@@ -32,7 +32,7 @@ namespace SharedShopping.Domain.Services
             return this.services
                 .Repository
                 .getUsers()
-                .map(prv_createDomainInstance<UserData, User>);
+                .map(prv_createDomainInstance<UserData, PrvUser>);
         }
     }
 }

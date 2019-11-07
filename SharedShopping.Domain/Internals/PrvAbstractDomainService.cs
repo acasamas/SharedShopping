@@ -3,11 +3,11 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal abstract class AbstractDomainService<TData> : AbstractService where TData : AbstractData
+    internal abstract class PrvAbstractDomainService<TData> : AbstractService where TData : AbstractData
     {
         protected readonly TData dataItem;
 
-        protected AbstractDomainService(IDomainServices services, TData dataItem) : base(services)
+        protected PrvAbstractDomainService(IDomainServices services, TData dataItem) : base(services)
         {
             this.services.Asserts.isNotNull(dataItem);
             prv_validate(dataItem);

@@ -7,12 +7,12 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class DomainContribution : AbstractDomainService<ContributionData>, IContribution
+    internal class PrvContribution : PrvAbstractDomainService<ContributionData>, IContribution
     {
-        private readonly Expense parentExpense;
+        private readonly PrvExpense parentExpense;
 
-        public DomainContribution(IDomainServices services
-            , ContributionData dataItem, Expense parentExpense)
+        public PrvContribution(IDomainServices services
+            , ContributionData dataItem, PrvExpense parentExpense)
             : base(services, dataItem)
         {
             this.parentExpense = parentExpense;
@@ -21,7 +21,7 @@ namespace SharedShopping.Domain.Internals
         public IUser User => this.services
             .Repository
             .getSingleUser(this.dataItem.UserId)
-            .mapTo(prv_createDomainInstance<UserData, User>);
+            .mapTo(prv_createDomainInstance<UserData, PrvUser>);
 
         public decimal Amount => this.dataItem.Amount;
         public IExpense Expense => this.parentExpense;
