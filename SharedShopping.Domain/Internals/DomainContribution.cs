@@ -7,11 +7,11 @@ using SharedShopping.Domain.Services;
 
 namespace SharedShopping.Domain.Internals
 {
-    internal class Contribution : AbstractDomainService<ContributionData>, IContribution
+    internal class DomainContribution : AbstractDomainService<ContributionData>, IContribution
     {
         private readonly Expense parentExpense;
 
-        public Contribution(IDomainServices services
+        public DomainContribution(IDomainServices services
             , ContributionData dataItem, Expense parentExpense)
             : base(services, dataItem)
         {

@@ -1,8 +1,8 @@
 ﻿namespace SharedShopping.Domain.Models
 {
-    public class NewContribution
+    public class UserContribution
     {
-        public string UserName { get; set; }
+        public IUser User { get; set; }
         public decimal Amount { get; set; }
     }
 }
