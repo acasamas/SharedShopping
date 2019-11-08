@@ -23,15 +23,14 @@ namespace SharedShopping.Domain.Services
                  Name = name,
             };
 
-            this.services.Repository.create(userData);
+            this.services.Users.set(userData);
             return userData.mapTo(prv_createDomainInstance<UserData, PrvUser>);
         }
 
         public IEnumerable<IUser> getUsers()
         {
             return this.services
-                .Repository
-                .getUsers()
+                .Users
                 .map(prv_createDomainInstance<UserData, PrvUser>);
         }
     }

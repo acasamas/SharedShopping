@@ -15,7 +15,7 @@ namespace SharedShopping.Domain.Internals
             : base(services, userData) { }
 
         public PrvUser(IDomainServices services, string name)
-            : base(services, prv_buildData(services.Repository, name)) { }
+            : base(services, prv_buildData(services.Users, name)) { }
 
         public string Name
         {
@@ -24,18 +24,18 @@ namespace SharedShopping.Domain.Internals
             {
                 this.services.Validator.stringIsNotEmpty(value, this.services.Strings.User_name_cannot_be_empty);
                 this.dataItem.Name = value;
-                this.services.Repository.save(this.dataItem);
+                this.services.Users.set(this.dataItem);
             }
         }
 
         public IEnumerable<IContribution> Contributions => this.services
-            .Repository
-            .getContributionsByUser(this.dataItem.Id.Value)
+            .Contributions
+            .getByUser(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ContributionData, PrvContribution>);
 
         public IEnumerable<IExpense> ExpensesAsDebtor => this.services
-            .Repository
-            .getExpensesByDebtor(this.dataItem.Id.Value)
+            .Debtors
+            .getExpensesByDebtorUser(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, PrvExpense>);
 
         public IEnumerable<Debt> Debts => base.prv_computeDebtBalance()
@@ -47,7 +47,7 @@ namespace SharedShopping.Domain.Internals
             this.services.Asserts.isTrue(userData.Id.HasValue, this.services.Strings.Data_object_has_no_id);
         }
 
-        private static UserData prv_buildData(IRepository repository, string name)
+        private static UserData prv_buildData(IUserRepository repository, string name)
         {
             UserData userData;
 
@@ -56,7 +56,7 @@ namespace SharedShopping.Domain.Internals
                 Name = name,
             };
 
-            repository.create(userData);
+            repository.set(userData);
             return userData;
         }
     }

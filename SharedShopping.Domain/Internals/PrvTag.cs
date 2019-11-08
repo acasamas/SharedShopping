@@ -13,7 +13,7 @@ namespace SharedShopping.Domain.Internals
     {
 
         public PrvTag(IDomainServices services, string name) 
-            : base(services, prv_buildData(services.Repository, name)) { }
+            : base(services, prv_buildData(services.Tags, name)) { }
 
         public PrvTag(IDomainServices services, TagData dataItem) 
             : base(services, dataItem) { }
@@ -25,12 +25,12 @@ namespace SharedShopping.Domain.Internals
             {
                 this.services.Validator.stringIsNotEmpty(value, this.services.Strings.Tag_name_cannot_be_empty);
                 this.dataItem.Name = value;
-                this.services.Repository.save(this.dataItem);
+                this.services.Tags.set(this.dataItem);
             }
         }
 
         public IEnumerable<IExpense> Expenses => this.services
-            .Repository
+            .TaggedExpenses
             .getExpensesByTag(this.dataItem.Id.Value)
             .map(prv_createDomainInstance<ExpenseData, PrvExpense>);
 
@@ -40,9 +40,9 @@ namespace SharedShopping.Domain.Internals
             this.services.Asserts.isTrue(data.Id.HasValue, this.services.Strings.Data_object_has_no_id);
         }
 
-        private static TagData prv_buildData(IRepository repository, string name)
+        private static TagData prv_buildData(ITagRepository repository, string name)
         {
-            return repository.getSingleOrDefaultTag(name);
+            return repository.getSingleOrDefault(name);
         }
 
     }

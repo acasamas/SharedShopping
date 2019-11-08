@@ -19,8 +19,8 @@ namespace SharedShopping.Domain.Internals
         }
 
         public IUser User => this.services
-            .Repository
-            .getSingleUser(this.dataItem.UserId)
+            .Users
+            .getSingle(this.dataItem.UserId)
             .mapTo(prv_createDomainInstance<UserData, PrvUser>);
 
         public decimal Amount => this.dataItem.Amount;

@@ -2,7 +2,6 @@
 using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
-using SharedShopping.Data.Services;
 
 namespace SharedShopping.Tests.Fakes
 {
@@ -10,29 +9,18 @@ namespace SharedShopping.Tests.Fakes
     {
         public FakeRepository()
         {
-            this.Expenses = new List<ExpenseData>();
             this.Users = new List<UserData>();
             this.Contributions = new List<ContributionData>();
             this.Tags = new List<TagData>();
             this.Debtors = new List<DebtorData>();
-            this.TaggedExpenses = new List<TaggedExpense>();
+            this.TaggedExpenses = new List<TaggedExpenseData>();
         }
 
-        public IList<ExpenseData> Expenses { get; }
         public IList<UserData> Users { get; }
         public IList<ContributionData> Contributions { get; }
         public IList<TagData> Tags { get; }
         public IList<DebtorData> Debtors { get; }
-        public IList<TaggedExpense> TaggedExpenses { get; }
-
-        public void create(ExpenseData itemData)
-        {
-            ExpenseData data;
-
-            itemData.Id = this.Expenses.Count+1;
-            data = itemData.mapTo<ExpenseData>();
-            this.Expenses.Add(data);
-        }
+        public IList<TaggedExpenseData> TaggedExpenses { get; }
 
         public void create(UserData dataItem)
         {
@@ -121,14 +109,6 @@ namespace SharedShopping.Tests.Fakes
             return this.Users;
         }
 
-        public void save(ExpenseData expense)
-        {
-            ExpenseData data;
-
-            data = this.Expenses.Single(e => e.Id == expense.Id);
-            expense.mapTo(data);
-        }
-
         public void save(UserData user)
         {
             UserData data;
@@ -183,7 +163,7 @@ namespace SharedShopping.Tests.Fakes
             existsEntry = this.TaggedExpenses.Any(mm => mm.ExpenseId == expenseId && mm.TagId == tagId);
 
             if (false == existsEntry)
-                this.TaggedExpenses.Add(new TaggedExpense
+                this.TaggedExpenses.Add(new TaggedExpenseData
                 {
                     ExpenseId = expenseId,
                     TagId = tagId,

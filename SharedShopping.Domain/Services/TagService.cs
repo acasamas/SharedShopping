@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Blacksmith.Automap.Extensions;
-using Blacksmith.Validations;
 using SharedShopping.Data.Models;
-using SharedShopping.Data.Services;
 using SharedShopping.Domain.Internals;
 using SharedShopping.Domain.Models;
 
@@ -19,8 +17,8 @@ namespace SharedShopping.Domain.Services
             TagData tag;
 
             tag = this.services
-                .Repository
-                .getSingleOrDefaultTag(name);
+                .Tags
+                .getSingleOrDefault(name);
 
             if(tag == null)
             {
@@ -29,7 +27,7 @@ namespace SharedShopping.Domain.Services
                     Name = name,
                 };
 
-                this.services.Repository.create(tag);
+                this.services.Tags.set(tag);
             }
 
             return tag.mapTo(prv_createDomainInstance<TagData, PrvTag>);
@@ -38,8 +36,7 @@ namespace SharedShopping.Domain.Services
         public IEnumerable<ITag> getTags()
         {
             return this.services
-                .Repository
-                .getTags()
+                .Tags
                 .map(prv_createDomainInstance<TagData, PrvTag>);
         }
     }

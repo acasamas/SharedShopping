@@ -10,13 +10,13 @@ namespace SharedShopping.Tests.Fakes
     {
         public FakeDomainServices()
         {
-            this.FakeRepository = new FakeRepository();
+            this.FakeExpenseRepository = new FakeExpenseRepository();
             this.Asserts = Blacksmith.Validations.Asserts.Assert;
             this.Validator = new DomainValidator(new EsDomainStrings());
         }
 
-        public IRepository Repository => this.FakeRepository;
-        public FakeRepository FakeRepository { get; }
+        public IExpenseRepository Expenses => this.FakeExpenseRepository;
+        public FakeExpenseRepository FakeExpenseRepository { get; }
 
         public IDomainStrings Strings => this.Validator.Strings;
         public IValidator Asserts { get; }

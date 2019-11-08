@@ -7,7 +7,12 @@ namespace SharedShopping.Domain.Services
 {
     public interface IDomainServices
     {
-        IRepository Repository { get; }
+        IExpenseRepository Expenses { get; }
+        IContributionRepository Contributions { get; }
+        IDebtorRepository Debtors { get; }
+        ITaggedExpenseRepository TaggedExpenses { get; }
+        ITagRepository Tags { get; }
+        IUserRepository Users { get; }
         IDomainStrings Strings { get; }
         IValidator Asserts { get; }
         IDomainValidator Validator { get; }
