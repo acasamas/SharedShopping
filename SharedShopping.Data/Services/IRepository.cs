@@ -5,27 +5,37 @@ namespace SharedShopping.Data.Services
 {
     public interface IRepository
     {
+        //expense
         void create(ExpenseData expense);
         void save(ExpenseData expense);
-        void setDebtor(int expenseId, int userId);
-        void setExpenseTag(int expenseId, int tagId);
-        IEnumerable<UserData> getDebtorsByExpense(int expenseId);
-        IEnumerable<ContributionData> getContributionsByExpense(int expenseId);
-        void setContribution(ContributionData contribution);
-        IEnumerable<TagData> getTagsByExpense(int expenseId);
-        
+
+        //user
         void create(UserData user);
         void save(UserData user);
-        IEnumerable<ExpenseData> getExpensesByDebtor(int userId);
-        IEnumerable<ContributionData> getContributionsByUser(int userId);
         UserData getSingleUser(string userName);
-        IEnumerable<UserData> getUsers();
         UserData getSingleUser(int userId);
+        IEnumerable<UserData> getUsers();
 
+        //tag
         void create(TagData tag);
         void save(TagData tag);
         TagData getSingleOrDefaultTag(string name);
-        IEnumerable<ExpenseData> getExpensesByTag(int tagId);
         IEnumerable<TagData> getTags();
+
+        //deb: expense-user
+        void setDebtor(int expenseId, int userId);
+        IEnumerable<UserData> getDebtorsByExpense(int expenseId);
+        IEnumerable<ExpenseData> getExpensesByDebtor(int userId);
+
+        //tag-expense
+        void setExpenseTag(int expenseId, int tagId);
+        IEnumerable<TagData> getTagsByExpense(int expenseId);
+        IEnumerable<ExpenseData> getExpensesByTag(int tagId);
+
+        //contribution: expense-user
+        void setContribution(ContributionData contribution);
+        IEnumerable<ContributionData> getContributionsByExpense(int expenseId);
+        IEnumerable<ContributionData> getContributionsByUser(int userId);
+        
     }
 }
