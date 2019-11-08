@@ -27,14 +27,29 @@ namespace SharedShopping.Tests.Fakes
 
         public void create(ExpenseData itemData)
         {
-            this.Expenses.Add(itemData);
-            itemData.Id = this.Expenses.Count;
+            ExpenseData data;
+
+            itemData.Id = this.Expenses.Count+1;
+            data = itemData.mapTo<ExpenseData>();
+            this.Expenses.Add(data);
         }
 
         public void create(UserData dataItem)
         {
-            this.Users.Add(dataItem);
-            dataItem.Id = this.Users.Count;
+            UserData data;
+
+            dataItem.Id = this.Users.Count + 1;
+            data = dataItem.mapTo<UserData>();
+            this.Users.Add(data);
+        }
+
+        public void create(TagData tag)
+        {
+            TagData data;
+
+            tag.Id = this.Tags.Count + 1;
+            data = tag.mapTo<TagData>();
+            this.Tags.Add(data);
         }
 
         public IEnumerable<ContributionData> getContributionsByExpense(int expenseId)
@@ -68,28 +83,25 @@ namespace SharedShopping.Tests.Fakes
                 .Join(this.Expenses, mm => mm.ExpenseId, expense => expense.Id, (mm, expense) => expense);
         }
 
-        public TagData getOrCreateTag(string name)
+        public TagData getSingleOrDefaultTag(string name)
         {
-            TagData tagData;
-
-            tagData = new TagData
-            {
-                Id = this.Tags.Count + 1,
-                Name = name,
-            };
-
-            this.Tags.Add(tagData);
-            return tagData;
+            return this.Tags
+                .SingleOrDefault(t => t.Name == name)?
+                .mapTo<TagData>();
         }
 
         public UserData getSingleUser(string userName)
         {
-            return this.Users.Single(u => u.Name == userName);
+            return this.Users
+                .Single(u => u.Name == userName)
+                .mapTo<UserData>();
         }
 
         public UserData getSingleUser(int userId)
         {
-            return this.Users.Single(u => u.Id == userId);
+            return this.Users
+                .Single(u => u.Id == userId)
+                .mapTo<UserData>();
         }
 
         public IEnumerable<TagData> getTags()
@@ -125,21 +137,12 @@ namespace SharedShopping.Tests.Fakes
             user.mapTo(data);
         }
 
-        public void saveOrCreate(TagData tag)
+        public void save(TagData tag)
         {
             TagData data;
 
-            if(tag.Id.HasValue)
-            {
-                data = this.Tags.Single(t => t.Id == tag.Id);
-                data.Name = tag.Name;
-            }
-            else
-            {
-                tag.Id = this.Tags.Count;
-                data = tag.mapTo<TagData>();
-                this.Tags.Add(data);
-            }
+            data = this.Tags.Single(t => t.Id == tag.Id);
+            tag.mapTo(data);
         }
 
         public void setContribution(ContributionData contribution)
@@ -148,7 +151,7 @@ namespace SharedShopping.Tests.Fakes
 
             data = this.Contributions.SingleOrDefault(c => c.ExpenseId == contribution.ExpenseId && c.UserId == contribution.UserId);
 
-            if(data != null)
+            if (data != null)
                 contribution.mapTo(data);
             else
             {

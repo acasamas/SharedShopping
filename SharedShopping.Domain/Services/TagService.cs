@@ -16,10 +16,23 @@ namespace SharedShopping.Domain.Services
 
         public ITag getOrCreateTag(string name)
         {
-            return this.services
+            TagData tag;
+
+            tag = this.services
                 .Repository
-                .getOrCreateTag(name)
-                .mapTo(prv_createDomainInstance<TagData, PrvTag>);
+                .getSingleOrDefaultTag(name);
+
+            if(tag == null)
+            {
+                tag = new TagData
+                {
+                    Name = name,
+                };
+
+                this.services.Repository.create(tag);
+            }
+
+            return tag.mapTo(prv_createDomainInstance<TagData, PrvTag>);
         }
 
         public IEnumerable<ITag> getTags()

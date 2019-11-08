@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 namespace SharedShopping.Data.Services
 {
-    public interface IExpenseRepository
-    {
-
-    }
     public interface IRepository
     {
         void create(ExpenseData expense);
@@ -25,9 +21,10 @@ namespace SharedShopping.Data.Services
         UserData getSingleUser(string userName);
         IEnumerable<UserData> getUsers();
         UserData getSingleUser(int userId);
-        
-        void saveOrCreate(TagData tag);
-        TagData getOrCreateTag(string name);
+
+        void create(TagData tag);
+        void save(TagData tag);
+        TagData getSingleOrDefaultTag(string name);
         IEnumerable<ExpenseData> getExpensesByTag(int tagId);
         IEnumerable<TagData> getTags();
     }

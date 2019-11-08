@@ -25,7 +25,7 @@ namespace SharedShopping.Domain.Internals
             {
                 this.services.Validator.stringIsNotEmpty(value, this.services.Strings.Tag_name_cannot_be_empty);
                 this.dataItem.Name = value;
-                this.services.Repository.saveOrCreate(this.dataItem);
+                this.services.Repository.save(this.dataItem);
             }
         }
 
@@ -42,15 +42,7 @@ namespace SharedShopping.Domain.Internals
 
         private static TagData prv_buildData(IRepository repository, string name)
         {
-            TagData tagData;
-
-            tagData = new TagData
-            {
-                Name = name,
-            };
-
-            repository.saveOrCreate(tagData);
-            return tagData;
+            return repository.getSingleOrDefaultTag(name);
         }
 
     }
