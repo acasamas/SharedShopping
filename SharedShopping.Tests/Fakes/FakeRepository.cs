@@ -5,7 +5,7 @@ using SharedShopping.Data.Models;
 
 namespace SharedShopping.Tests.Fakes
 {
-    public class FakeRepository : IRepository
+    public class FakeRepository 
     {
         public FakeRepository()
         {

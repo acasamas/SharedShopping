@@ -9,11 +9,8 @@ namespace SharedShopping.Tests
 {
     public class UnitTest1
     {
-        private readonly FakeDomainServices services;
-
         public UnitTest1()
         {
-            this.services = new FakeDomainServices();
         }
 
         [Fact]
