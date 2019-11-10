@@ -8,28 +8,9 @@ namespace SharedShopping.Tests.Fakes
 {
     public class FakeRepository
     {
-        public FakeRepository()
-        {
-            this.Users = new List<UserData>();
-            this.Contributions = new List<ContributionData>();
-            this.Tags = new List<TagData>();
-            this.Debtors = new List<DebtorData>();
-            this.TaggedExpenses = new List<TaggedExpenseData>();
-        }
-
         public IList<ContributionData> Contributions { get; }
-        public IList<TagData> Tags { get; }
         public IList<DebtorData> Debtors { get; }
         public IList<TaggedExpenseData> TaggedExpenses { get; }
-
-        public void create(TagData tag)
-        {
-            TagData data;
-
-            tag.Id = this.Tags.Count + 1;
-            data = tag.mapTo<TagData>();
-            this.Tags.Add(data);
-        }
 
         public IEnumerable<ContributionData> getContributionsByExpense(int expenseId)
         {
@@ -62,31 +43,11 @@ namespace SharedShopping.Tests.Fakes
                 .Join(this.Expenses, mm => mm.ExpenseId, expense => expense.Id, (mm, expense) => expense);
         }
 
-        public TagData getSingleOrDefaultTag(string name)
-        {
-            return this.Tags
-                .SingleOrDefault(t => t.Name == name)?
-                .mapTo<TagData>();
-        }
-
-        public IEnumerable<TagData> getTags()
-        {
-            return this.Tags;
-        }
-
         public IEnumerable<TagData> getTagsByExpense(int expenseId)
         {
             return this.TaggedExpenses
                 .Where(mm => mm.ExpenseId == expenseId)
                 .Join(this.Tags, mm => mm.TagId, tag => tag.Id, (mm, tag) => tag);
-        }
-
-        public void save(TagData tag)
-        {
-            TagData data;
-
-            data = this.Tags.Single(t => t.Id == tag.Id);
-            tag.mapTo(data);
         }
 
         public void setContribution(ContributionData contribution)

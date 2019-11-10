@@ -37,7 +37,7 @@ namespace SharedShopping.Domain.Models
             get => this.id;
             set
             {
-                isTrue<OutOfRangeExpenseIdDomainException>(0 < value);
+                isTrue<OutOfRangeExpenseId>(0 < value);
                 this.id = value;
             }
         }
@@ -47,7 +47,7 @@ namespace SharedShopping.Domain.Models
             get => this.concept;
             set
             {
-                stringIsNotEmpty<RequiredExpenseConceptDomainException>(value);
+                stringIsNotEmpty<RequiredExpenseConcept>(value);
                 this.concept = value;
             }
         }

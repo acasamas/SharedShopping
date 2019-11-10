@@ -17,7 +17,7 @@ namespace SharedShopping.Domain.Models
             get => this.name;
             set
             {
-                base.stringIsNotEmpty<RequiredTagNameDomainException>(value);
+                base.stringIsNotEmpty<RequiredTagName>(value);
                 this.name = value;
             }
         }

@@ -6,6 +6,7 @@ namespace SharedShopping.Domain.Services
 {
     public interface IExpenseService
     {
+        void save(Expense expense);
         IEnumerable<Debt> getCurrentDebtBalance();
         IEnumerable<Expense> getExpenses();
     }

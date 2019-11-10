@@ -2,7 +2,7 @@
 
 namespace SharedShopping.Domain.Exceptions
 {
-    public class OutOfRangeExpenseIdDomainException : DomainException
+    public class OutOfRangeExpenseId : DomainException
     {
     }
 }

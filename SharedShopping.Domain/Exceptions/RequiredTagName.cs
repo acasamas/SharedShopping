@@ -4,7 +4,7 @@ using System;
 namespace SharedShopping.Domain.Exceptions
 {
     [Serializable]
-    public class RequiredExpenseConceptDomainException : DomainException
+    public class RequiredTagName : DomainException
     {
     }
 }

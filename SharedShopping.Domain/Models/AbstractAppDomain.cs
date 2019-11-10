@@ -10,7 +10,7 @@ namespace SharedShopping.Domain.Models
 
         protected void dateIsValid(DateTime date)
         {
-            isTrue(minimalDate <= date, () => new OutOfRangeDateDomainException(minimalDate, date));
+            isTrue(minimalDate <= date, () => new OutOfRangeDate(minimalDate, date));
         }
 
 

@@ -3,9 +3,9 @@ using System;
 
 namespace SharedShopping.Domain.Exceptions
 {
-    public class OutOfRangeDateDomainException : DomainException
+    public class OutOfRangeDate : DomainException
     {
-        public OutOfRangeDateDomainException(DateTime minimumDate, DateTime triedValue) : base()
+        public OutOfRangeDate(DateTime minimumDate, DateTime triedValue) : base()
         {
             this.MinimumDate = minimumDate;
             this.TriedValue = triedValue;
