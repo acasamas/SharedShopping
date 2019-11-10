@@ -9,5 +9,6 @@ namespace SharedShopping.Domain.Services
         void save(Expense expense);
         IEnumerable<Debt> getCurrentDebtBalance();
         IEnumerable<Expense> getExpenses();
+        IEnumerable<Debt> getDebts(User user);
     }
 }

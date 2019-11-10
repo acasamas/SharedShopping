@@ -16,15 +16,22 @@ namespace SharedShopping.Domain.Services
             this.tags = tags;
         }
 
-        public IEnumerable<Expense> getExpensesByTag(Tag tag)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IEnumerable<Tag> getTags()
         {
             return this.tags.map(map);
         }
 
+        public void save(Tag tag)
+        {
+            TagData data;
+
+            data = this
+                .tags
+                .getSingleOrDefault(tag.Name)
+                ?? new TagData();
+
+            tag.mapTo(data);
+            this.tags.set(data);
+        }
     }
 }

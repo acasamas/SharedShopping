@@ -18,16 +18,12 @@ namespace SharedShopping.Tests.Fakes
 
         public IList<UserData> Users { get; }
 
-        public Type ElementType => this.Users.AsQueryable().ElementType;
-        public Expression Expression => this.Users.AsQueryable().Expression;
-        public IQueryProvider Provider => this.Users.AsQueryable().Provider;
-
         public IEnumerator<UserData> GetEnumerator()
         {
             return this.Users.GetEnumerator();
         }
 
-        public UserData getSingle(string userName)
+        public UserData getSingleOrDefault(string userName)
         {
             return this.Users
                 .Single(u => u.Name == userName)

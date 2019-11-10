@@ -17,11 +17,16 @@ namespace SharedShopping.Domain.Services
             this.users = users;
         }
 
-        public IEnumerable<User> getUsers()
+        public void save(User user)
         {
-            return this.users
-                .map(map);
+            this.users.set(user.mapTo<UserData>());
         }
 
+        public IEnumerable<User> getUsers()
+        {
+            return this
+                .users
+                .map(map);
+        }
     }
 }

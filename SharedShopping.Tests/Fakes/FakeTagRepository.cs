@@ -16,11 +16,7 @@ namespace SharedShopping.Tests.Fakes
             this.Tags = new List<TagData>();
         }
 
-        public ICollection<TagData> Tags { get; }
-
-        public Type ElementType => this.Tags.AsQueryable().ElementType;
-        public Expression Expression => this.Tags.AsQueryable().Expression;
-        public IQueryProvider Provider => this.Tags.AsQueryable().Provider;
+        public IList<TagData> Tags { get; }
 
         public IEnumerator<TagData> GetEnumerator()
         {

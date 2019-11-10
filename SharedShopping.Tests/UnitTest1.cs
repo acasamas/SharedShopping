@@ -1,5 +1,6 @@
 using System;
 using Blacksmith.Validations.Exceptions;
+using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
 using SharedShopping.Tests.Fakes;
@@ -9,77 +10,51 @@ namespace SharedShopping.Tests
 {
     public class UnitTest1
     {
-        public UnitTest1()
-        {
-        }
-
-        [Fact]
-        public void can_create_tag_service()
-        {
-            ITagService tagService;
-
-            tagService = new TagService(this.services);
-
-            Assert.NotNull(tagService);
-        }
-
         [Fact]
         public void can_create_tag()
         {
+            FakeTagRepository tags; 
             ITagService tagService;
-            ITag tag;
+            Tag tag;
 
-            tagService = new TagService(this.services);
+            tags = new FakeTagRepository();
+            tagService = new TagService(tags);
 
-            this.services
-                .FakeExpenseRepository
-                .Tags
-                .Clear();
-
-            tag = tagService.getOrCreateTag("Hostelería");
-            Assert.Equal(1, this.services.FakeExpenseRepository.Tags.Count);
-            Assert.NotNull(tag);
-            Assert.Equal("Hostelería", tag.Name);
+            tag = new Tag("Hostelería");
+            tagService.save(tag);
+            Assert.Equal(1, tags.Tags.Count);
+            Assert.Equal("Hostelería", tags.Tags[0].Name);
         }
 
         [Fact]
         public void can_create_expense()
         {
+            Expense expense;
+            User georgeUser, martiUser;
+            Tag restaurantTag;
             IExpenseService expenseService;
-            IExpense expense;
-            IUser georgeUser, martiUser;
-            IUserService userService;
+            FakeExpenseRepository expenseRespository;
 
-            this.services.FakeExpenseRepository.Users.Clear();
-            this.services.FakeExpenseRepository.Debtors.Clear();
-            this.services.FakeExpenseRepository.Expenses.Clear();
+            georgeUser = new User("George Mcfly");
+            martiUser = new User("Marti Mcfly");
 
-            userService = new UserService(this.services);
-            expenseService = new ExpenseService(this.services);
-
-            georgeUser = userService.createUser("George Mcfly");
-            Assert.Equal(1, this.services.FakeExpenseRepository.Users.Count);
-            martiUser = userService.createUser("Marti Mcfly");
-            Assert.Equal(2, this.services.FakeExpenseRepository.Users.Count);
-
-            expense = expenseService.createExpense(DateTime.Now, "Domino's Pizza", new UserContribution[]
+            expense = new Expense(1, DateTime.Now, "Domino's Pizza", new Contribution[]
             {
-                new UserContribution
-                {
-                    Amount = 19.95m,
-                    User = georgeUser,
-                }
+                new Contribution(georgeUser, 19.95m),
             });
-            Assert.Equal(1, this.services.FakeExpenseRepository.Expenses.Count);
-            Assert.Equal(1, this.services.FakeExpenseRepository.Contributions.Count);
-            Assert.Equal(0, this.services.FakeExpenseRepository.Debtors.Count);
 
             expense.setDebtor(georgeUser);
-            Assert.Equal(1, this.services.FakeExpenseRepository.Debtors.Count);
             Assert.Throws<DomainException>(() => expense.setDebtor(georgeUser));
 
             expense.setDebtor(martiUser);
-            Assert.Equal(2, this.services.FakeExpenseRepository.Debtors.Count);
+
+            restaurantTag = new Tag("Restaurants and Coffee shops");
+            expense.setTag(restaurantTag);
+
+            expenseRespository = new FakeExpenseRepository();
+            expenseService = new ExpenseService(expenseRespository);
+            expenseService.save(expense);
+            Assert.Equal(1, expenseRespository.Expenses.Count);
         }
     }
 }

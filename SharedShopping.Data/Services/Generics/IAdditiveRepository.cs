@@ -1,4 +1,4 @@
-﻿namespace SharedShopping.Data.Services
+﻿namespace SharedShopping.Data.Services.Generics
 {
     public interface IAdditiveRepository<T> : IEnumerableRepository<T>
     {

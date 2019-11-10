@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
@@ -16,15 +14,16 @@ namespace SharedShopping.Tests.Fakes
             this.Expenses = new List<ExpenseData>();
         }
 
-        public IList<ExpenseData> Expenses { get; }
-
-        public Type ElementType => this.Expenses.AsQueryable().ElementType;
-        public Expression Expression => this.Expenses.AsQueryable().Expression;
-        public IQueryProvider Provider => this.Expenses.AsQueryable().Provider;
+        public ICollection<ExpenseData> Expenses { get; }
 
         public IEnumerator<ExpenseData> GetEnumerator()
         {
             return this.Expenses.GetEnumerator();
+        }
+
+        public IEnumerable<FullExpense> getExpenses()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void set(ExpenseData data)

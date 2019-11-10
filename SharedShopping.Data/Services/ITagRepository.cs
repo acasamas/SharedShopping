@@ -1,4 +1,5 @@
 ﻿using SharedShopping.Data.Models;
+using SharedShopping.Data.Services.Generics;
 
 namespace SharedShopping.Data.Services
 {
