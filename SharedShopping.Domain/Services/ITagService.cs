@@ -5,7 +5,7 @@ namespace SharedShopping.Domain.Services
 {
     public interface ITagService
     {
-        ITag getOrCreateTag(string name);
-        IEnumerable<ITag> getTags();
+        IEnumerable<Tag> getTags();
+        IEnumerable<Expense> getExpensesByTag(Tag tag);
     }
 }
