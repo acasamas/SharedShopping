@@ -2,10 +2,11 @@
 using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
+using SharedShopping.Data.Services;
 
 namespace SharedShopping.Tests.Fakes
 {
-    public class FakeRepository 
+    public class FakeRepository
     {
         public FakeRepository()
         {
@@ -16,20 +17,10 @@ namespace SharedShopping.Tests.Fakes
             this.TaggedExpenses = new List<TaggedExpenseData>();
         }
 
-        public IList<UserData> Users { get; }
         public IList<ContributionData> Contributions { get; }
         public IList<TagData> Tags { get; }
         public IList<DebtorData> Debtors { get; }
         public IList<TaggedExpenseData> TaggedExpenses { get; }
-
-        public void create(UserData dataItem)
-        {
-            UserData data;
-
-            dataItem.Id = this.Users.Count + 1;
-            data = dataItem.mapTo<UserData>();
-            this.Users.Add(data);
-        }
 
         public void create(TagData tag)
         {
@@ -78,20 +69,6 @@ namespace SharedShopping.Tests.Fakes
                 .mapTo<TagData>();
         }
 
-        public UserData getSingleUser(string userName)
-        {
-            return this.Users
-                .Single(u => u.Name == userName)
-                .mapTo<UserData>();
-        }
-
-        public UserData getSingleUser(int userId)
-        {
-            return this.Users
-                .Single(u => u.Id == userId)
-                .mapTo<UserData>();
-        }
-
         public IEnumerable<TagData> getTags()
         {
             return this.Tags;
@@ -102,19 +79,6 @@ namespace SharedShopping.Tests.Fakes
             return this.TaggedExpenses
                 .Where(mm => mm.ExpenseId == expenseId)
                 .Join(this.Tags, mm => mm.TagId, tag => tag.Id, (mm, tag) => tag);
-        }
-
-        public IEnumerable<UserData> getUsers()
-        {
-            return this.Users;
-        }
-
-        public void save(UserData user)
-        {
-            UserData data;
-
-            data = this.Users.Single(u => u.Id == user.Id);
-            user.mapTo(data);
         }
 
         public void save(TagData tag)

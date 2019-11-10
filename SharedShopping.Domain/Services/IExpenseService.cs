@@ -7,5 +7,6 @@ namespace SharedShopping.Domain.Services
     public interface IExpenseService
     {
         IEnumerable<Debt> getCurrentDebtBalance();
+        IEnumerable<Expense> getExpenses();
     }
 }
