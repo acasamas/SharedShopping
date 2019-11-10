@@ -1,46 +1,37 @@
 ﻿using System.Collections.Generic;
 using Blacksmith.Automap.Extensions;
-using Blacksmith.Validations;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
-using SharedShopping.Domain.Internals;
 using SharedShopping.Domain.Models;
 
 namespace SharedShopping.Domain.Services
 {
     public class TagService : AbstractService, ITagService
     {
-        public TagService(IDomainServices domainCore) : base(domainCore)
+        private readonly ITagRepository tags;
+
+        public TagService(ITagRepository tags) : base()
         {
+            this.assert.isNotNull(tags);
+            this.tags = tags;
         }
 
-        public ITag getOrCreateTag(string name)
+        public IEnumerable<Tag> getTags()
         {
-            TagData tag;
-
-            tag = this.services
-                .Repository
-                .getSingleOrDefaultTag(name);
-
-            if(tag == null)
-            {
-                tag = new TagData
-                {
-                    Name = name,
-                };
-
-                this.services.Repository.create(tag);
-            }
-
-            return tag.mapTo(prv_createDomainInstance<TagData, PrvTag>);
+            return this.tags.map(map);
         }
 
-        public IEnumerable<ITag> getTags()
+        public void save(Tag tag)
         {
-            return this.services
-                .Repository
-                .getTags()
-                .map(prv_createDomainInstance<TagData, PrvTag>);
+            TagData data;
+
+            data = this
+                .tags
+                .getSingleOrDefault(tag.Name)
+                ?? new TagData();
+
+            tag.mapTo(data);
+            this.tags.set(data);
         }
     }
 }

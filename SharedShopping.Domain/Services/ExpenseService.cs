@@ -1,24 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using Blacksmith.Automap.Extensions;
+using SharedShopping.Data.Models;
+using SharedShopping.Data.Services;
 using SharedShopping.Domain.Models;
 
 namespace SharedShopping.Domain.Services
 {
     public class ExpenseService : AbstractService, IExpenseService
     {
-        public ExpenseService(IDomainServices services) : base(services)
-        {
+        private readonly IExpenseRepository expenses;
 
-        }
-
-        public IExpense createExpense(DateTime date, string concept, IEnumerable<UserContribution> contributions)
+        public ExpenseService(IExpenseRepository expenses) : base()
         {
-            throw new NotImplementedException();
+            this.assert.isNotNull(expenses);
+
+            this.expenses = expenses;
         }
 
         public IEnumerable<Debt> getCurrentDebtBalance()
         {
-            return base.prv_computeDebtBalance();
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Debt> getDebts(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Expense> getExpenses()
+        {
+            return this.expenses
+                .getExpenses()
+                .map(map);
+        }
+
+        public void save(Expense expense)
+        {
+            this.assert.isNotNull(expense);
+            this.expenses.set(expense.mapTo<ExpenseData>());
         }
     }
 }

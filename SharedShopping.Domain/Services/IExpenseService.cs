@@ -6,9 +6,9 @@ namespace SharedShopping.Domain.Services
 {
     public interface IExpenseService
     {
-        IExpense createExpense(DateTime date, string concept
-            , IEnumerable<UserContribution> contributions);
-
+        void save(Expense expense);
         IEnumerable<Debt> getCurrentDebtBalance();
+        IEnumerable<Expense> getExpenses();
+        IEnumerable<Debt> getDebts(User user);
     }
 }

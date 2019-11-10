@@ -5,7 +5,7 @@ namespace SharedShopping.Domain.Services
 {
     public interface IUserService
     {
-        IUser createUser(string name);
-        IEnumerable<IUser> getUsers();
+        IEnumerable<User> getUsers();
+        void save(User user);
     }
 }

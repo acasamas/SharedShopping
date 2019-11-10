@@ -1,34 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
+using Blacksmith.Automap.Extensions;
+using SharedShopping.Data.Models;
 using SharedShopping.Domain.Models;
 
 namespace SharedShopping.Domain.Services
 {
-    public abstract class AbstractService
+    public abstract class AbstractService : AbstractAppDomain
     {
-        protected readonly IDomainServices services;
-
-        public AbstractService(IDomainServices services)
+        protected static Tag map(TagData data)
         {
-            this.services = services;
+            return new Tag(data.Name);
         }
 
-        protected TOut prv_createDomainInstance<TIn, TOut>(TIn source)
+        protected static User map(UserData data)
         {
-            Type outType;
-            ConstructorInfo constructor;
-
-            outType = typeof(TOut);
-            constructor = outType.GetConstructor(new Type[] { typeof(IDomainServices), typeof(TIn) });
-            this.services.Asserts.isNotNull(constructor);
-
-            return (TOut)constructor.Invoke(new object[] { this.services, source });
+            return new User(data.Name);
         }
 
-        protected IEnumerable<Debt> prv_computeDebtBalance()
+        protected Expense map(FullExpense data)
         {
-            throw new NotImplementedException();
+            Expense expense;
+            IEnumerable<Contribution> contributions;
+
+            contributions = data
+                .Contributions
+                .map(map);
+
+            expense = data.Expense
+                .mapTo(e => new Expense(e.Id.Value, e.Date, e.Concept, contributions));
+
+            data.Debtors
+                .map(map)
+                .ToList()
+                .ForEach(expense.setDebtor);
+
+            data.Tags
+                .map(map)
+                .ToList()
+                .ForEach(expense.setTag);
+
+            return expense;
         }
+
+        protected Contribution map(ExpenseContribution data)
+        {
+            return new Contribution(data.User.mapTo(map), data.Amount);
+        }
+
+
     }
 }

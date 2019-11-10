@@ -1,9 +1,21 @@
-﻿namespace SharedShopping.Domain.Models
+﻿using SharedShopping.Domain.Exceptions;
+
+namespace SharedShopping.Domain.Models
 {
-    public class Debt
+    public class Debt : AbstractAppDomain
     {
-        public IUser Debtor { get; set; }
-        public decimal Amount { get; set; }
-        public IUser Creditor { get; set; }
+        public Debt(User debtor , User creditor, decimal amount)
+        {
+            this.assert.isNotNull(debtor);
+            this.assert.isNotNull(creditor);
+            isTrue<OutOfRangeAmount>(0 < amount);
+
+            this.Debtor = debtor;
+            this.Creditor = creditor;
+            this.Amount = amount;
+        }
+        public User Debtor { get; }
+        public decimal Amount { get; }
+        public User Creditor { get; }
     }
 }
