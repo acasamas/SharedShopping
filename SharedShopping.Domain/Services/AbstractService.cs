@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
@@ -9,6 +8,15 @@ namespace SharedShopping.Domain.Services
 {
     public abstract class AbstractService : AbstractAppDomain
     {
+        protected static ExpenseData map(Expense model)
+        {
+            return new ExpenseData
+            {
+                Date = model.Date,
+                Concept = model.Concept,
+            };
+        }
+
         protected static Tag map(TagData data)
         {
             return new Tag(data.Name);
@@ -49,6 +57,14 @@ namespace SharedShopping.Domain.Services
             return new Contribution(data.User.mapTo(map), data.Amount);
         }
 
+        protected ExpenseContribution map(Contribution data)
+        {
+            return new ExpenseContribution
+            {
+                User = data.User.mapTo<UserData>(),
+                Amount = data.Amount,
+            };
+        }
 
     }
 }

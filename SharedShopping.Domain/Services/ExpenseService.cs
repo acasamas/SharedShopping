@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Blacksmith.Automap.Extensions;
 using SharedShopping.Data.Models;
 using SharedShopping.Data.Services;
@@ -30,15 +31,32 @@ namespace SharedShopping.Domain.Services
 
         public IEnumerable<Expense> getExpenses()
         {
-            return this.expenses
-                .getExpenses()
-                .map(map);
+            return this.expenses.map(map);
         }
 
         public void save(Expense expense)
         {
+            FullExpense fullExpense;
+
             this.assert.isNotNull(expense);
-            this.expenses.set(expense.mapTo<ExpenseData>());
+
+            fullExpense = new FullExpense
+            {
+                Expense = map(expense),
+                Tags = expense.Tags
+                    .map<TagData>()
+                    .ToList(),
+
+                Debtors = expense.Debtors
+                    .map<UserData>()
+                    .ToList(),
+
+                Contributions = expense.Contributions
+                    .Select(map)
+                    .ToList(),
+            };
+
+            this.expenses.set(fullExpense);
         }
     }
 }

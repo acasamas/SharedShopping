@@ -11,36 +11,19 @@ namespace SharedShopping.Tests.Fakes
     {
         public FakeExpenseRepository()
         {
-            this.Expenses = new List<ExpenseData>();
+            this.Expenses = new List<FullExpense>();
         }
 
-        public ICollection<ExpenseData> Expenses { get; }
+        public IList<FullExpense> Expenses { get; }
 
-        public IEnumerator<ExpenseData> GetEnumerator()
+        public IEnumerator<FullExpense> GetEnumerator()
         {
             return this.Expenses.GetEnumerator();
         }
 
-        public IEnumerable<FullExpense> getExpenses()
+        public void set(FullExpense data)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void set(ExpenseData data)
-        {
-            ExpenseData dbData;
-
-            if (data.Id.HasValue)
-            {
-                dbData = this.Expenses.Single(e => e.Id == data.Id);
-                data.mapTo(dbData);
-            }
-            else
-            {
-                data.Id = this.Expenses.Count + 1;
-                dbData = data.mapTo<ExpenseData>();
-                this.Expenses.Add(dbData);
-            }
+            this.Expenses.Add(data);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

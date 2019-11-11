@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Blacksmith.Validations.Exceptions;
 using SharedShopping.Data.Services;
+using SharedShopping.Domain.Exceptions;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
 using SharedShopping.Tests.Fakes;
@@ -44,7 +46,7 @@ namespace SharedShopping.Tests
             });
 
             expense.setDebtor(georgeUser);
-            Assert.Throws<DomainException>(() => expense.setDebtor(georgeUser));
+            Assert.Throws<AlreadyAddedExpenseDebtor>(() => expense.setDebtor(georgeUser));
 
             expense.setDebtor(martiUser);
 
@@ -54,7 +56,20 @@ namespace SharedShopping.Tests
             expenseRespository = new FakeExpenseRepository();
             expenseService = new ExpenseService(expenseRespository);
             expenseService.save(expense);
+
             Assert.Equal(1, expenseRespository.Expenses.Count);
+            Assert.Equal("Domino's Pizza", expenseRespository.Expenses[0].Expense.Concept);
+
+            Assert.Single(expenseRespository.Expenses[0].Contributions);
+            Assert.Equal("George Mcfly", expenseRespository.Expenses[0].Contributions.ToList()[0].User.Name);
+            Assert.Equal(19.95m, expenseRespository.Expenses[0].Contributions.ToList()[0].Amount);
+
+            Assert.Single(expenseRespository.Expenses[0].Debtors, d => d.Name == "Marti Mcfly");
+            Assert.Single(expenseRespository.Expenses[0].Debtors, d => d.Name == "George Mcfly");
+
+            Assert.Single(expenseRespository.Expenses[0].Tags);
+            Assert.Single(expenseRespository.Expenses[0].Tags, t => t.Name == "Restaurants and Coffee shops");
+
         }
     }
 }
