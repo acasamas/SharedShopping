@@ -9,6 +9,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedShopping.Data", "Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedShopping.Tests", "SharedShopping.Tests\SharedShopping.Tests.csproj", "{7716707F-0CD8-49BB-AE59-8DE5A8D0CC20}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0104F0AB-861A-43D8-818A-E437F7C53AF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{CFBA9F79-AA29-4B02-ABB3-62CD0B4EBF15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A7C7B4B5-0309-4D7F-9FE2-65807FEE424C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedShopping.Apps.WebMvc", "SharedShopping.Apps.WebMvc\SharedShopping.Apps.WebMvc.csproj", "{BF7FBB81-3867-4043-9B4B-410E1C1F7B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedShopping.Tests.WebMvcTests", "SharedShopping.Tests.WebMvcTests\SharedShopping.Tests.WebMvcTests.csproj", "{55F88627-432C-4D95-95AA-8DC18444E1A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +37,24 @@ Global
 		{7716707F-0CD8-49BB-AE59-8DE5A8D0CC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7716707F-0CD8-49BB-AE59-8DE5A8D0CC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7716707F-0CD8-49BB-AE59-8DE5A8D0CC20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7FBB81-3867-4043-9B4B-410E1C1F7B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7FBB81-3867-4043-9B4B-410E1C1F7B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7FBB81-3867-4043-9B4B-410E1C1F7B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7FBB81-3867-4043-9B4B-410E1C1F7B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55F88627-432C-4D95-95AA-8DC18444E1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55F88627-432C-4D95-95AA-8DC18444E1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55F88627-432C-4D95-95AA-8DC18444E1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55F88627-432C-4D95-95AA-8DC18444E1A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{894A14CA-E0C8-4D60-B008-C50B927F7301} = {A7C7B4B5-0309-4D7F-9FE2-65807FEE424C}
+		{9A61E7ED-FC66-43FF-B913-A0C0F5A65434} = {A7C7B4B5-0309-4D7F-9FE2-65807FEE424C}
+		{7716707F-0CD8-49BB-AE59-8DE5A8D0CC20} = {0104F0AB-861A-43D8-818A-E437F7C53AF5}
+		{BF7FBB81-3867-4043-9B4B-410E1C1F7B30} = {CFBA9F79-AA29-4B02-ABB3-62CD0B4EBF15}
+		{55F88627-432C-4D95-95AA-8DC18444E1A0} = {0104F0AB-861A-43D8-818A-E437F7C53AF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D5E9B2-1B20-4268-93E5-C74D255615D5}
