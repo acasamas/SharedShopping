@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SharedShopping.Domain.Services
 {
-    public interface IExpenseService
+    public interface IExpenseService : IDisposable
     {
         void save(Expense expense);
         IEnumerable<Debt> getCurrentDebtBalance();

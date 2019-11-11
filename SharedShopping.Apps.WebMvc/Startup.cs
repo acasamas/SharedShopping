@@ -1,7 +1,9 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using SharedShopping.Domain.Fakes.Services;
+using SharedShopping.Domain.Services;
 
-[assembly: OwinStartupAttribute(typeof(SharedShopping.Apps.WebMvc.Startup))]
+[assembly: OwinStartup(typeof(SharedShopping.Apps.WebMvc.Startup))]
 namespace SharedShopping.Apps.WebMvc
 {
     public partial class Startup
@@ -9,6 +11,7 @@ namespace SharedShopping.Apps.WebMvc
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            app.CreatePerOwinContext<IExpenseService>(() => new FakeExpenseService());
         }
     }
 }

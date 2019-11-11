@@ -58,5 +58,9 @@ namespace SharedShopping.Domain.Services
 
             this.expenses.set(fullExpense);
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

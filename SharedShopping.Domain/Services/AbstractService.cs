@@ -32,8 +32,7 @@ namespace SharedShopping.Domain.Services
             Expense expense;
             IEnumerable<Contribution> contributions;
 
-            contributions = data
-                .Contributions
+            contributions = data.Contributions
                 .map(map);
 
             expense = data.Expense
