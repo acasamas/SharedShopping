@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using SharedShopping.Domain.Fakes.Services;
 using SharedShopping.Domain.Models;
 using SharedShopping.Domain.Services;
 
@@ -13,9 +9,10 @@ namespace SharedShopping.Apps.WebMvc.Controllers
     {
         private readonly IExpenseService expenseService;
 
-        public ExpensesController()
+        public ExpensesController(IExpenseService expenseService)
         {
-            this.expenseService = new FakeExpenseService();
+            this.expenseService = expenseService;
+            //this.expenseService = new FakeExpenseService();
         }
 
         // GET: Expenses
